@@ -12,7 +12,7 @@ development:
   database: gitlog_development
   pool: 5
   username: root
-  password:
+  password: '123456'
   socket: /var/run/mysqld/mysqld.sock
 
 # Warning: The database defined as "test" will be erased and
