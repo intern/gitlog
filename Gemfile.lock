@@ -5,6 +5,13 @@ GIT
     authlogic (2.1.6)
       activesupport
 
+GIT
+  remote: git://github.com/rails/dynamic_form.git
+  revision: ebb0321
+  specs:
+    dynamic_form (1.0.0)
+      rails (>= 3.0.0)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -79,6 +86,7 @@ PLATFORMS
 
 DEPENDENCIES
   authlogic!
+  dynamic_form!
   mysql2
   rails (= 3.0.3)
   rails3-generators

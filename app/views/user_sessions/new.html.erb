@@ -1,0 +1,13 @@
+<% form_for @user_session, :url => login_path do |f| %>
+  <%= f.error_messages :header_message => 'Error!', :message => 'here message', :header_tag => 'h3' %>
+  <%= f.label :login %>
+  <%= f.text_field :login %><br />
+
+  <%= f.label :password %>
+  <%= f.password_field :password %><br />
+
+  <%= f.label :remember_me %>
+  <%= f.check_box :remember_me %>
+
+  <%= f.submit "OK" %>
+<% end %>

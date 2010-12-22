@@ -12,6 +12,9 @@ gem 'mysql2'
 gem 'authlogic', :git => 'git://github.com/binarylogic/authlogic.git'
 gem 'rails3-generators'
 
+gem 'dynamic_form', :git => 'git://github.com/rails/dynamic_form.git'
+
+
 # Use unicorn as the web server
 # gem 'unicorn'
 

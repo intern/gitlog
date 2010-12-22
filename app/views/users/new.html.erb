@@ -1,0 +1,18 @@
+
+<%= form_for @user do |f| -%>
+  <%= f.error_messages :header_message => "Invalid product!", :message => "You'll need to fix the following fields:", :header_tag => :h3 -%><br />
+  <%= f.label :login %>
+  <%= f.text_field  :login %><br />
+
+  <%= f.label :email %>
+  <%= f.text_field  :email %><br />
+  <%# = f.error_message_on :email %>
+  <%= f.label :password %>
+  <%= f.password_field :password %><br />
+
+  <%= f.label :password_confirmation %>
+  <%= f.password_field :password_confirmation %><br />
+
+  <%= f.submit %>  
+<% end -%>
+

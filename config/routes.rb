@@ -1,5 +1,12 @@
 Gitlog::Application.routes.draw do
-  get "welcome/index"
+
+  resource :account, :controller => 'users'
+
+  get "account/login",    :to => 'user_sessions#new',     :as => 'login'
+
+  post "account/login",   :to => 'user_sessions#create',  :as => 'login_post'
+
+  match "account/logout", :to => 'user_sessions#destroy', :as => 'logout'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
@@ -11,6 +18,7 @@ Gitlog::Application.routes.draw do
   # Sample of named route:
   #   match 'products/:id/purchase' => 'catalog#purchase', :as => :purchase
   # This route can be invoked with purchase_url(:id => product.id)
+  # match '/account/logout' => 'user_sessions#destory', :as => :logout
 
   # Sample resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
@@ -47,7 +55,6 @@ Gitlog::Application.routes.draw do
   #     # (app/controllers/admin/products_controller.rb)
   #     resources :products
   #   end
-  resource :users, :path => '/account'
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
