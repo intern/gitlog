@@ -1,0 +1,39 @@
+
+zh:
+  activerecord:
+    errors:
+      models
+        user:
+          attributes:
+            login:
+              is: asd
+    models:
+      user: Git用户
+    attributes:
+      user:
+        login: 帐号
+        email: 邮箱
+        password: 密码
+        password_confirmation: 确认密码
+      
+  authlogic:
+    error_messages:
+      login_blank: 不能为空
+      login_not_found: 无效的
+      login_invalid: 只能用字符、数字、空格和 .-_@
+      consecutive_failed_logins_limit_exceeded: Consecutive failed logins limit exceeded, account is disabled.
+      email_invalid: 必须是email地址.
+      password_blank: 不能为空
+      password_invalid: 无效的
+      not_active: 你的帐号未激活
+      not_confirmed: 你的帐号未确认
+      not_approved: 你的帐号未被通过
+      no_authentication_details: 你没有提供任何认证信息
+    models:
+      user_session: UserSession
+    attributes:
+      user_session: #(or whatever name you are using)
+        login: 帐号
+        email: 邮箱
+        password: 密码
+        remember_me: 记住密码
