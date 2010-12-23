@@ -2,12 +2,13 @@ Gitlog::Application.routes.draw do
 
   resource :account, :controller => 'users'
 
-  get "account/login",    :to => 'user_sessions#new',     :as => 'login'
+  get "login",    :to => 'user_sessions#new',     :as => 'login'
 
-  post "account/login",   :to => 'user_sessions#create',  :as => 'login_post'
+  post "login",   :to => 'user_sessions#create',  :as => 'login_post'
 
-  match "account/logout", :to => 'user_sessions#destroy', :as => 'logout'
-
+  match "logout", :to => 'user_sessions#destroy', :as => 'logout'
+  match "account/activate/:token", :to => 'users#activate', :as => 'account_activate'
+  
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
