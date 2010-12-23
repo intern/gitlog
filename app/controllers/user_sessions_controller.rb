@@ -9,7 +9,7 @@ class UserSessionsController < ApplicationController
   def create
     @user_session = UserSession.new(params[:user_session])
     if @user_session.save
-      flash[:notice] = "Login successful!"
+      flash[:notice] = "登录成功!"
       redirect_to account_path
     else
       render :action => :new
@@ -18,7 +18,7 @@ class UserSessionsController < ApplicationController
   
   def destroy
     current_user_session.destroy
-    flash[:notice] = "Logout successful!"
+    flash[:notice] = "已经退出了!"
     redirect_to root_path
   end
 
@@ -29,10 +29,11 @@ class UserSessionsController < ApplicationController
   def create_retrieve_password
     @user = User.find_by_email(params[:email])
     if @user
-      UserMailer.retrieve_password_email(@user).deliver      
+      UserMailer.retrieve_password_email(@user).deliver
       render :action => :create_retrieve_password
     else
       render :action => :new_retrieve_password
     end
+    
   end
 end

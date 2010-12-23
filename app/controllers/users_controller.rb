@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
-  before_filter :require_user,    :except => [ :activate, :new, :create ]
-  before_filter :require_no_user, :only   => [ :new, :create ]
-
+  before_filter :require_user,          :except => [ :activate, :new, :create ]
+  before_filter :require_no_user,       :only   => [ :new, :create, :activate, :new_password_reset, :create_password_reset ]
+  before_filter :find_perishable_token, :only => [ :new_password_reset, :create_password_reset ]
   def index
     @user = current_user
     render :action => :index
@@ -33,10 +33,23 @@ class UsersController < ApplicationController
 
   def activate
     @user = User.find_using_perishable_token( params[:token] )
-    if @user.active?
+    if @user.nil? or @user.try('active?')
       redirect_to root_path
     else
       @user.activate!
     end
   end
+  
+  def new_password_reset
+    
+  end
+  
+  def create_password_reset
+    
+  end
+  
+  private
+    def find_perishable_token
+      @user = User.find_using_perishable_token( params[:token] )
+    end
 end
