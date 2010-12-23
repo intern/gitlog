@@ -4,18 +4,22 @@ class UsersController < ApplicationController
 
   def index
     @user = current_user
-    render 'index'
+    render :action => :index
   end
 
   def new
     @user = User.new
-    respond_to do |format|
-      format.html
-    end
+    #render :action => :new
+  end
+
+  def edit
+    @user = current_user
+    #render :action => :edit
   end
 
   def show
     @user = current_user
+    #render :action => :show
   end
 
   def create
@@ -23,7 +27,7 @@ class UsersController < ApplicationController
     if @user.save
       UserMailer.register_activate_email(@user).deliver
     else
-      render 'new'
+      render :action => :new
     end
   end
 

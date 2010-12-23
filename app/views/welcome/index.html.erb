@@ -1,1 +1,5 @@
 <p>欢迎来到git!</p>
+<% unless logged_in? %>
+  <%= link_to "登录", login_path %>
+  <%= link_to "注册", new_account_path %>
+<% end %>

@@ -3,4 +3,5 @@ zh:
   user_mailer:
     register_activate_email:
       text_mail: |-
-        欢迎注册 git.iforeach.com 点击激活 %{url}.
+        欢迎注册 git.iforeach.com 点击下面链接激活:
+        %{url}
