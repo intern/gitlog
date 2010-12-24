@@ -123,7 +123,8 @@ module GitAPI
       #    reference git-server of python API
       def run_command(options = {})
         _command = "git-api --action #{command} #{options[:user]} #{options[:repository]} #{options[:new_repository]} #{options[:new_user]}".strip
-        popen3(_command)
+        print _command
+        Open3.popen3(_command)
       end
   end
 end
