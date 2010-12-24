@@ -1,0 +1,9 @@
+<h4>忘记密码</h4>
+<%= form_for @user, :url => password_reset_path, :method => :put do |f| %>
+  <p><%= f.label :password %></p>
+  <p><%= f.password_field :password %></p>
+  <p><%= f.label :password_confirmation %></p>
+  <p><%= f.password_field :password_confirmation %></p>
+  <p><%= f.hidden_field :perishable_token, :name => :token %></p>
+  <p><%= f.submit %></p>
+<% end %>

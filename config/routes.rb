@@ -15,10 +15,13 @@ Gitlog::Application.routes.draw do
     post  :login, :to => :create, :as => 'login'
 
     match :logout, :to => :destroy, :as => 'logout'
-
-    get   :retrieve_password, :to => :new_retrieve_password
-    post  :retrieve_password, :to => :create_retrieve_password
   end
+
+  resource :password_reset, :controller => :password_resets, :except => [ :show, :edit, :destroy ] do
+    match '/:token/edit', :to => :edit, :via => [ :get ], :as => :edit
+  end
+
+
   #get "login",    :to => 'user_sessions#new',     :as => 'login'
 
   #post "login",   :to => 'user_sessions#create',  :as => 'login_post'

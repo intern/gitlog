@@ -1,3 +1,4 @@
+<h4>登陆GIT</h4>
 <% form_for @user_session, :url => login_path do |f| %>
   <%= f.error_messages :header_message => '提示', :message => '登录信息错误!', :header_tag => 'h3' %>
   <p><%= f.label :login %></p>
@@ -10,4 +11,4 @@
 
   <p><%= f.submit %></p>
 <% end %>
-<%= link_to t('.register_link'), new_account_path %> | <%= link_to "忘记密码?", retrieve_password_path %>
+<%= link_to t('.register_link'), new_account_path %> | <%= link_to "忘记密码?", new_password_reset_path %>

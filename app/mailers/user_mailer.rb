@@ -7,8 +7,8 @@ class UserMailer < ActionMailer::Base
     mail(:to => user.email, :subject => "Welcome to git server")
   end
 
-  def retrieve_password_email(user)
-    @reset_url = user.perishable_token
+  def password_reset_email(user)
+    @reset_token = user.perishable_token
     mail(:to => user.email, :subject => "Retrieve Password tip")
   end
 

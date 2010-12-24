@@ -1,4 +1,7 @@
 class User < ActiveRecord::Base
+  has_many :projects,      :dependent => :delete_all
+  has_many :sshes,      :dependent => :delete_all
+
   acts_as_authentic do |c|
     c.ignore_blank_passwords = false
   end
@@ -10,6 +13,12 @@ class User < ActiveRecord::Base
     self
   end
 
+  def deliver_password_reset_mail!
+    reset_perishable_token!
+    UserMailer.password_reset_email(self).deliver
+  end
+
+  #
   def to_param
     login
   end
