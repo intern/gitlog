@@ -1,20 +1,28 @@
 Gitlog::Application.routes.draw do
 
   resource :account,
-           :controller => 'users',
+           :controller => :users,
            :except => [ :show ],
            :path_names => {
              :new => 'signup',
              :edit => 'settings'
            } do
     get :show
+    resources :public_keys, :controller => :sshes, :path_names => {
+             :new => 'new',
+             :edit => 'edit'
+           }
+    resources :repositories, :path_names => {
+             :new => 'new',
+             :edit => 'edit'
+           }
   end
 
   controller :user_sessions do
-    get   :login, :to => :new, :as => 'login'
+    get   :login, :to => :new,    :as => 'login'
     post  :login, :to => :create, :as => 'login'
 
-    match :logout, :to => :destroy, :as => 'logout'
+    match :logout,:to => :destroy,:as => 'logout'
   end
 
   resource :password_reset, :controller => :password_resets, :except => [ :show, :edit, :destroy ] do
@@ -28,7 +36,7 @@ Gitlog::Application.routes.draw do
 
   #match "logout", :to => 'user_sessions#destroy', :as => 'logout'
   match "account/activate/:token", :to => 'users#activate', :as => 'account_activate'
-  
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

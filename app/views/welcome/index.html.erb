@@ -1,5 +1,18 @@
+<!-- Start WOWSlider.com BODY section -->
+<div id="wowslider-container">
+    <div id="wowslider-images">
+        <%= link_to image_tag("features/1.jpg", :style => "visibility:visible;", :title => "VIEW FROM CHATEAU DES BAUX-DE-PROVENC"), "#" %>
+		<%= link_to image_tag("features/2.jpg", :title => "VIEW FROM CHATEAU DES BAUX-DE-PROVENC0"), "#" %>
+		<%= link_to image_tag("features/3.jpg", :title => "VIEW FROM CHATEAU DES BAUX-DE-PROVENC1"), "#" %>
+		<%= link_to image_tag("features/4.jpg", :title => "VIEW FROM CHATEAU DES BAUX-DE-PROVENC2"), "#" %>
+		<%= link_to image_tag("features/5.jpg", :title => "VIEW FROM CHATEAU DES BAUX-DE-PROVENC3"), "#" %>
+    </div>
+	<div id="wowslider-shadow"></div>
+</div>
+    <%= javascript_include_tag 'script' %>
+<!-- End WOWSlider.com BODY section -->
 <p>欢迎来到git!</p>
 <% unless logged_in? %>
-  <%= link_to "登录", login_path %>
-  <%= link_to "注册", new_account_path %>
+	<%= link_to "登录", login_path %>
+	<%= link_to "注册", new_account_path %>
 <% end %>

@@ -1,0 +1,11 @@
+<h1>添加SSH public key</h1>
+<% form_for @ssh, :url => account_public_keys_path do |f| %>
+  <%= f.error_messages %>
+  <p><%= f.label :title %></p>
+  <p><%= f.text_field :title %></p>
+  
+  <p><%= f.label :ssh_key %></p>
+  <p><%= f.text_area :ssh_key, :rows => 10 %></p>
+  <p><%= f.submit %></p>
+<% end %>
+<%= link_to "SSH KEY管理", account_public_keys_path %>

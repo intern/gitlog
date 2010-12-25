@@ -9,13 +9,22 @@ zh:
               is: asd
     models:
       user: Git用户
+      ssh: SSH公钥
+      project: GIT仓库
     attributes:
       user:
         login: 帐号
         email: 邮箱
         password: 密码
         password_confirmation: 确认密码
-      
+      ssh:
+        title: 标识
+        ssh_key: 公钥
+      project:
+        name: 项目名
+        location: 参考地址
+        description: 描述
+        protected: 私有
   authlogic:
     error_messages:
       login_blank: 不能为空

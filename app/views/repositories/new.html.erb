@@ -1,0 +1,17 @@
+<h1>添加新仓库</h1>
+<% form_for @project, :url => account_repositories_path do |f| %>
+  <%= f.error_messages %>
+  <p><%= f.label :name %></p>
+  <p><%= f.text_field :name %></p>
+  
+  <p><%= f.label :location %></p>
+  <p><%= f.text_field :location %></p>
+  
+  <p><%= f.label :description %></p>
+  <p><%= f.text_area :description, :rows => 10 %></p>
+  
+  <p><%= f.check_box :protected %><%= f.label :protected %></p>
+  
+  <p><%= f.submit %></p>
+<% end %>
+<p><%= link_to "仓库管理", account_repositories_path %></p>

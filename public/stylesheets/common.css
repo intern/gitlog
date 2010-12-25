@@ -1,0 +1,33 @@
+body {
+  font-size: 14px;
+}
+a {
+	color: #172da1;
+}
+/* all input type text */
+input[type="text"] {
+	height: 1.9em;
+	border:1px inset #000;
+}
+input[type="text"]:hover {
+	border: 1px inset #3ba3d0;
+}
+
+/* all input type password */
+input[type="password"] {
+	height: 1.9em;
+	border:1px inset #000;
+}
+input[type="password"]:hover {
+	border: 1px inset #3ba3d0;
+}
+
+textarea {
+	border:1px inset #000;
+}
+textarea:hover {
+	border: 1px inset #3ba3d0;
+}
+input[type="text"],input[type="password"], textarea {
+	width: 300px;
+}

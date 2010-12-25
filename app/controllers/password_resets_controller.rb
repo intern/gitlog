@@ -13,6 +13,7 @@ class PasswordResetsController < ApplicationController
       #UserMailer.retrieve_password_email(@user).deliver
       render :action => :create
     else
+      flash[:notice] = "提交的邮箱信息不存在!"
       render :action => :new
     end
   end
@@ -27,6 +28,7 @@ class PasswordResetsController < ApplicationController
     if @user.save
       render :action => :update
     else
+      flash[:notice] = "提交的信息不正确!"
       redirect_to edit_password_reset_path(params[:token])
     end
   end

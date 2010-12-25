@@ -1,0 +1,2 @@
+module SshesHelper
+end

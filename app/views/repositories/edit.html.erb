@@ -1,0 +1,17 @@
+<h1>更新仓库信息</h1>
+<%= form_for @project, :url => account_repository_path do |f| %>
+  <%= f.error_messages %>
+  <p><%= f.label :name %></p>
+  <p><%= f.text_field :name %></p>
+
+  <p><%= f.label :location %></p>
+  <p><%= f.text_field :location %></p>
+
+  <p><%= f.label :description %></p>
+  <p><%= f.text_area :description, :rows => 10 %></p>
+  
+  <p><%= f.check_box :protected %><%= f.label :protected %></p>
+  
+  <p><%= f.submit %>  <%= link_to "删除", account_repository_path(@ssh),:confirm => "确定要删除?", :method => :delete %></p>
+<% end %>
+<%= link_to "GIT仓库管理首页", account_repository_path %>

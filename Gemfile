@@ -14,7 +14,7 @@ gem 'rails3-generators'
 
 gem 'dynamic_form', :git => 'git://github.com/rails/dynamic_form.git'
 
-
+gem 'jquery-rails'
 # Use unicorn as the web server
 # gem 'unicorn'
 
