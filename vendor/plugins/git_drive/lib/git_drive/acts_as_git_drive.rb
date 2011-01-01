@@ -1,3 +1,21 @@
+module GitDrive  # Generic GitApi error exception class.
+  class GitDriveError < StandardError
+  end
+
+  # Raised GitDrive params error exception when the need params lose {:user}
+  class GitDriveParamsError < GitDriveError
+  end
+
+  # Raised GitDrive command params error exception when the :action params not in ACTIONS_METHODS list
+  class GitDriveCommandParamsError < GitDriveParamsError
+  end
+
+  #
+  class GitDriveCmdExecuteError < GitDriveError
+
+  end
+end
+
 module GitDrive
   module Base
     def self.included(klass)
@@ -21,7 +39,9 @@ module GitDrive
         @git_repos_root ||= File.expand_path( base.set_git_repositories_root )
         git_dir_option = "--git-dir=#{@git_repos_root}/#{user}/#{repository}"
         cmd = "#{@git_bin} #{git_dir_option} #{options.join(' ')}"
-        %x[#{cmd}]
+        tmp = %x[#{cmd} 2> /dev/null]
+        raise GitDriveCmdExecuteError unless $?.success?
+        tmp
       end
     end
 
@@ -31,14 +51,23 @@ module GitDrive
       #  inter@intern:~/gs.git$ git ls-tree master -- setup.py
       #  100644 blob 07931573c4c384e012727c956c5c825b605b96bb    setup.py
       # </shell>
-      def get_hash_by_path(user, repository, base, path, type='blob')
-        execute(self, user, repository, ['ls-tree', base, '--', path])
+      def get_hash_by_path(user, repository, base, path)
+#        execute(self, user, repository, ['ls-tree', base, '--', path]).each_line do |line|
+#          puts line.scan(/^([0-9]+) (.+) ([0-9a-fA-F]{40})\t/)
+#        end
+        execute(self, user, repository, ['ls-tree', base, '--', path]).scan(/^[0-9]+ .+ ([0-9a-fA-F]{40})\t/)
         #git_cmd(), "ls-tree", $base, "--", $path
       end
 
       # get path of given hash at given ref
+      #   blob object not is tree tag
       def get_path_by_hash(user, repository, base, hash)
         #git_cmd(), "ls-tree", '-r', '-t', '-z', $base
+        reg = Regexp.new("(?:[0-9]+) (?:.+) #{hash}\\t(.+)$")
+        execute(self, user, repository, ['ls-tree', '-r', '-t', base]).each_line do |line|
+          return $1 if line.scan(reg) and $1
+        end
+        return false
         # while it
       end
 
@@ -50,7 +79,7 @@ module GitDrive
       #   commit
       # </shell>
       def get_type_by_hash(user, repository, base, hash)
-        #
+        execute(self, user, repository, ['cat-file', '-t', hash]).strip
       end
 
       # get log data with the path
@@ -60,8 +89,39 @@ module GitDrive
       #   inter@intern:~/gs.git$ git log master -- setup.py
       #   ...
       #  </shell>
+      #  @return
+      #  [{:author=>"lan_chi",
+      #    :tree_hash=>"30ccb08801656483f906a9994853fab78144ff45",
+      #    :commit_hash=>"52149f199127c8e65c5beb201368f82ba99edbb5",
+      #    :comment=>"Update files, release v0.1.0",
+      #    :email=>"lan_chi@foxmail.com",
+      #    :date=>"2010-12-27 11:01:58 +0800"},
+      #   {:author=>"lan_chi",
+      #    :tree_hash=>"5207126388283c4b49ca3b163c788410d17c3849",
+      #    :commit_hash=>"a7063ed2d1fddb1291e551457d8f391e3ff594a4",
+      #    :comment=>"Update the setuptools install.",
+      #    :email=>"lan_chi@foxmail.com",
+      #    :date=>"2010-12-10 12:17:52 +0800"},
+      #   {:author=>"lan_chi",
+      #    :tree_hash=>"c7bb3db55b422fb91b98eb58fed0c16fbe445eba",
+      #    :commit_hash=>"d27b3426fcf24b6aa37d6245389aca856f5bb145",
+      #    :comment=>"Update setup option.",
+      #    :email=>"lan_chi@foxmail.com",
+      #    :date=>"2010-12-10 10:53:56 +0800"},
+      #   {:author=>"lan_chi",
+      #    :tree_hash=>"e5634753d20ca8af902345565363a1a741f67e1d",
+      #    :commit_hash=>"e0496745ede2d3b4ef43e3db4a466a74fe966c67",
+      #    :comment=>
+      #     "Rename file 'gitinit.py' to 'git-init.py', and add python setuptools 'setup.py'",
+      #    :email=>"lan_chi@foxmail.com",
+      #    :date=>"2010-12-09 16:38:47 +0800"}]
       def get_log_by_path(user, repository, base, path)
-        #
+        log_array = []
+        execute(self, user, repository, ['log', base, '--format="format:%T%x09%H%x09%an%x09%ae%x09%ai%x09%s"', '--', path]).strip.each_line do |line|
+          log = line.strip.split("\t")
+          log_array << {:tree_hash => log.shift, :commit_hash => log.shift, :author => log.shift, :email => log.shift, :date => log.shift, :comment => log.shift}
+        end
+        log_array
       end
 
       # get the references hash the type
@@ -87,7 +147,7 @@ module GitDrive
       #  import os, sys, ConfigParser
       #  </shell>
       def get_blob_plain_by_hash(user, repository, hash)
-        #
+        execute(self, user, repository, ['cat-file', 'blob', hash])
       end
 
       # get the plain text if given filename
@@ -100,8 +160,9 @@ module GitDrive
       #  """
       #  import os, sys, ConfigParser
       #  </shell>
-      def get_blob_plain_by_filename(user, repository, base, name)
-        #
+      def get_blob_plain_by_filepath(user, repository, base, filepath)
+        file_hash = get_hash_by_path(user , repository, base, filepath)
+        execute(self, user, repository, ['cat-file', 'blob', file_hash])
       end
 
       # get the tag info with tag hash-id
@@ -244,6 +305,7 @@ module GitDrive
       module_eval do
         include Command
       end
+
     end
 
     # any method placed here will apply to instaces
