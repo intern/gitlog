@@ -1,50 +1,7 @@
-module GitDrive  # Generic GitApi error exception class.
-  class GitDriveError < StandardError
-  end
-
-  # Raised GitDrive params error exception when the need params lose {:user}
-  class GitDriveParamsError < GitDriveError
-  end
-
-  # Raised GitDrive command params error exception when the :action params not in ACTIONS_METHODS list
-  class GitDriveCommandParamsError < GitDriveParamsError
-  end
-
-  #
-  class GitDriveCmdExecuteError < GitDriveError
-
-  end
-end
+# coding: utf-8
 
 module GitDrive
   module Base
-    def self.included(klass)
-      klass.class_eval do
-        extend Config
-        extend ClassMethods
-      end
-    end
-
-    module Config
-      attr_accessor :set_git_bin_path, :set_git_repositories_root
-      def git_config_with(&block)
-        # cattr_accessor :set_git_bin_path
-        yield self if block_given?
-      end
-    end
-
-    module Command
-      def execute(base, user, repository, options = [])
-        @git_bin        ||= base.set_git_bin_path
-        @git_repos_root ||= File.expand_path( base.set_git_repositories_root )
-        git_dir_option = "--git-dir=#{@git_repos_root}/#{user}/#{repository}"
-        cmd = "#{@git_bin} #{git_dir_option} #{options.join(' ')}"
-        tmp = %x[#{cmd} 2> /dev/null]
-        raise GitDriveCmdExecuteError unless $?.success?
-        tmp
-      end
-    end
-
     module ClassMethods
       # get hash of given path at given ref
       # <shell>
@@ -162,8 +119,8 @@ module GitDrive
       #  import os, sys, ConfigParser
       #  </shell>
       def get_blob_plain_by_filepath(user, repository, base, filepath)
-        file_hash = get_hash_by_path(user , repository, base, filepath)
-        execute(self, user, repository, ['cat-file', 'blob', file_hash])
+        hash = get_hash_by_path(user , repository, base, filepath)
+        get_blob_plain_by_hash(user, repository, hash)
       end
 
       # get the tag info with tag hash-id
@@ -186,7 +143,7 @@ module GitDrive
       #   c9c0a096346adff7db2f2a33a5e13e0f69c2e2b6
       #  </shell>
       def get_head_hash(user, repository)
-        #
+        get_hash_by_name(user, repository, 'HEAD')
       end
 
       # get the tag hash with the given name HEAD, master or tag name
@@ -195,7 +152,7 @@ module GitDrive
       #   2ec41843db960b8f50737d13a2daf312bc664ced
       #  </shell>
       def get_hash_by_name(user, repository, name)
-        #
+        execute(self, user, repository, ['rev-parse', '--verify', '-q', '--short=40', name]).strip
       end
 
       # Lists commit objects in reverse chronological order
@@ -209,8 +166,37 @@ module GitDrive
       #
       #       Update readme file.
       #  </shell>
-      def get_commit_info_by_hash(user, repository, base)
-        #
+      #  @return array
+      #    [{:author=>"lan_chi",
+      #      :tree_hash=>"2a3f590222ac1327cec19aeb8e3f86a4cd1a23fc",
+      #      :parent_hase=>"31898bf7b711a9c8c0c7191e489c904c22294079",
+      #      :commit_hash=>"c9c0a096346adff7db2f2a33a5e13e0f69c2e2b6",
+      #      :comment=>"Update readme file.",
+      #      :email=>"lan_chi@foxmail.com",
+      #      :date=>"2010-12-27 11:25:40 +0800"},
+      #     {:author=>"lan_chi",
+      #      :tree_hash=>"be6cf8dc64d377f649fb291adf5c61d3905e882d",
+      #      :parent_hase=>"52149f199127c8e65c5beb201368f82ba99edbb5",
+      #      :commit_hash=>"31898bf7b711a9c8c0c7191e489c904c22294079",
+      #      :comment=>"Release v0.1.0",
+      #      :email=>"lan_chi@foxmail.com",
+      #      :date=>"2010-12-27 11:17:45 +0800"}
+      #    ]
+      def get_commit_info_by_hash(user, repository, base, count = 30)
+        commit_data = []
+        commits = execute(self, user, repository, ['rev-list', '--format="format:%P%x09%T%x09%an%x09%ae%x09%ai%x09%s"', "--max-count=#{count}", base]).strip
+        commits.gsub(/commit ([0-9a-fA-F]{40})\n([0-9a-fA-F]{40})\t([0-9a-fA-F]{40})\t(.+)\t(.+)\t(.+)\t(.+)/) do |p|
+          commit_data << {
+            :commit_hash => $1,
+            :parent_hase => $2,
+            :tree_hash => $3,
+            :author => $4,
+            :email => $5,
+            :date => $6,
+            :comment => $7
+          }
+        end
+        commit_data
       end
 
       #  Lists commit objects with given file name
@@ -224,9 +210,23 @@ module GitDrive
       #
       #       Update files, release v0.1.0
       #  </shell>
-      #  Do't use this if list file history @see
-      def get_commit_info_by_path(user, repository, base, path)
-        #
+      #  Do't use this if list file history @see get_commit_info_by_hash
+      def get_commit_info_by_path(user, repository, base, path, count = 30)
+        commit_data = []
+        commits = execute(self, user, repository, ['rev-list', '--format="format:%P%x09%T%x09%an%x09%ae%x09%ai%x09%s"', "--max-count=#{count}", base, '--', path]).strip
+        commits.gsub(/commit ([0-9a-fA-F]{40})\n([0-9a-fA-F]{40})\t([0-9a-fA-F]{40})\t(.+)\t(.+)\t(.+)\t(.+)/) do |p|
+          puts p
+          commit_data << {
+            :commit_hash => $1,
+            :parent_hase => $2,
+            :tree_hash   => $3,
+            :author      => $4,
+            :email       => $5,
+            :date        => $6,
+            :comment     => $7
+          }
+        end
+        commit_data
       end
 
       # list log with base, tree or file hash
@@ -238,7 +238,7 @@ module GitDrive
       #
       #       Update readme file.
       #  </shell> or <shell>
-      #   inter@intern:~/gs.git$ git log  --max-count=1 31898bf7b711a9c8c0c7191e489c904c22294079
+      #   inter@intern:~/gs.git$ git log --max-count=1 31898bf7b711a9c8c0c7191e489c904c22294079
       #   commit 31898bf7b711a9c8c0c7191e489c904c22294079
       #   Author: lan_chi <lan_chi@foxmail.com>
       #   Date:   Mon Dec 27 11:17:45 2010 +0800
@@ -294,14 +294,5 @@ module GitDrive
         include Command
       end
     end
-
-    # any method placed here will apply to instaces
-    module InstanceMethods
-      def squawk(string)
-        write_attribute(self.class.set_git_bin_path, string.to_squawk)
-      end
-    end
   end
 end
-
-ActiveRecord::Base.send :include, GitDrive::Base

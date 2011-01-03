@@ -1,3 +1,5 @@
+# coding: utf-8
+
 require 'test_helper'
 
 class Hickwall < ActiveRecord::Base
@@ -37,9 +39,9 @@ class ActsAsGitDriveTest < Test::Unit::TestCase
     assert_equal "tree",  Wickwall.get_type_by_hash('git', 'gs.git', 'master', '515a87f210ce8c62414329fd894fa9e0d31b7bb2')
   end
 
-  def test_get_log_by_path
-    assert_equal "blob",  Wickwall.get_log_by_path('git', 'gs.git', 'master', 'setup.py')
-    assert_equal "blob",  Wickwall.get_log_by_path('git', 'gs.git', 'master', 'git_server')
+  def test_get_log_list_by_path
+    assert_equal "blob",  Wickwall.get_log_list_by_path('git', 'gs.git', 'master', 'setup.py')
+    assert_equal "blob",  Wickwall.get_log_list_by_path('git', 'gs.git', 'master', 'git_server')
   end
 
   def test_get_blob_plain_by_hash
@@ -48,6 +50,22 @@ class ActsAsGitDriveTest < Test::Unit::TestCase
 
   def test_get_blob_plain_by_hash
     assert_equal "blob",  Wickwall.get_blob_plain_by_filepath('git', 'gs.git', 'master', 'setup.py')
+  end
+
+  def test_get_head_hash
+    assert_equal "c9c0a096346adff7db2f2a33a5e13e0f69c2e2b6", Wickwall.get_head_hash('git', 'gs.git')
+  end
+
+  def test_get_hash_by_name
+    assert_equal "2ec41843db960b8f50737d13a2daf312bc664ced", Wickwall.get_hash_by_name('git', 'gs.git', 'v0.1.0')
+  end
+
+  def test_get_commit_info_by_hash
+    assert_equal "test_get_commit_info_by_hash", Wickwall.get_commit_info_by_hash('git', 'gs.git', 'master')
+  end
+
+  def test_get_commit_info_by_path
+    assert_equal "test_get_commit_info_by_path", Wickwall.get_commit_info_by_path('git', 'gs.git', 'master', 'setup.py')
   end
 end
 

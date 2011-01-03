@@ -1,4 +1,10 @@
-require 'git_drive/acts_as_git_drive'
+# coding: utf-8
+
+require 'git_drive/exceptions'
+require 'git_drive/command'
+require 'git_drive/class_methods'
+require 'git_drive/instance_methods'
+require 'git_drive/base'
 
 #module GitDrive
 #  module Base
