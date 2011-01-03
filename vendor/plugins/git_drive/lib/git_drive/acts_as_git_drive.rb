@@ -52,15 +52,12 @@ module GitDrive
       #  100644 blob 07931573c4c384e012727c956c5c825b605b96bb    setup.py
       # </shell>
       def get_hash_by_path(user, repository, base, path)
-#        execute(self, user, repository, ['ls-tree', base, '--', path]).each_line do |line|
-#          puts line.scan(/^([0-9]+) (.+) ([0-9a-fA-F]{40})\t/)
-#        end
         execute(self, user, repository, ['ls-tree', base, '--', path]).scan(/^[0-9]+ .+ ([0-9a-fA-F]{40})\t/)
-        #git_cmd(), "ls-tree", $base, "--", $path
       end
 
       # get path of given hash at given ref
       #   blob object not is tree tag
+      #   @return hash string, false if the type error
       def get_path_by_hash(user, repository, base, hash)
         #git_cmd(), "ls-tree", '-r', '-t', '-z', $base
         reg = Regexp.new("(?:[0-9]+) (?:.+) #{hash}\\t(.+)$")
@@ -78,6 +75,7 @@ module GitDrive
       #   inter@intern:~/gs.git$ git cat-file -t master
       #   commit
       # </shell>
+      #  @return string blob | tree | commit
       def get_type_by_hash(user, repository, base, hash)
         execute(self, user, repository, ['cat-file', '-t', hash]).strip
       end
@@ -89,33 +87,36 @@ module GitDrive
       #   inter@intern:~/gs.git$ git log master -- setup.py
       #   ...
       #  </shell>
-      #  @return
-      #  [{:author=>"lan_chi",
-      #    :tree_hash=>"30ccb08801656483f906a9994853fab78144ff45",
-      #    :commit_hash=>"52149f199127c8e65c5beb201368f82ba99edbb5",
-      #    :comment=>"Update files, release v0.1.0",
-      #    :email=>"lan_chi@foxmail.com",
-      #    :date=>"2010-12-27 11:01:58 +0800"},
-      #   {:author=>"lan_chi",
-      #    :tree_hash=>"5207126388283c4b49ca3b163c788410d17c3849",
-      #    :commit_hash=>"a7063ed2d1fddb1291e551457d8f391e3ff594a4",
-      #    :comment=>"Update the setuptools install.",
-      #    :email=>"lan_chi@foxmail.com",
-      #    :date=>"2010-12-10 12:17:52 +0800"},
-      #   {:author=>"lan_chi",
-      #    :tree_hash=>"c7bb3db55b422fb91b98eb58fed0c16fbe445eba",
-      #    :commit_hash=>"d27b3426fcf24b6aa37d6245389aca856f5bb145",
-      #    :comment=>"Update setup option.",
-      #    :email=>"lan_chi@foxmail.com",
-      #    :date=>"2010-12-10 10:53:56 +0800"},
-      #   {:author=>"lan_chi",
-      #    :tree_hash=>"e5634753d20ca8af902345565363a1a741f67e1d",
-      #    :commit_hash=>"e0496745ede2d3b4ef43e3db4a466a74fe966c67",
-      #    :comment=>
-      #     "Rename file 'gitinit.py' to 'git-init.py', and add python setuptools 'setup.py'",
-      #    :email=>"lan_chi@foxmail.com",
-      #    :date=>"2010-12-09 16:38:47 +0800"}]
-      def get_log_by_path(user, repository, base, path)
+      #  @return structure:
+      #   <code>
+      #    [{:author=>"lan_chi",
+      #      :tree_hash=>"30ccb08801656483f906a9994853fab78144ff45",
+      #      :commit_hash=>"52149f199127c8e65c5beb201368f82ba99edbb5",
+      #      :comment=>"Update files, release v0.1.0",
+      #      :email=>"lan_chi@foxmail.com",
+      #      :date=>"2010-12-27 11:01:58 +0800"},
+      #     {:author=>"lan_chi",
+      #      :tree_hash=>"5207126388283c4b49ca3b163c788410d17c3849",
+      #      :commit_hash=>"a7063ed2d1fddb1291e551457d8f391e3ff594a4",
+      #      :comment=>"Update the setuptools install.",
+      #      :email=>"lan_chi@foxmail.com",
+      #      :date=>"2010-12-10 12:17:52 +0800"},
+      #     {:author=>"lan_chi",
+      #      :tree_hash=>"c7bb3db55b422fb91b98eb58fed0c16fbe445eba",
+      #      :commit_hash=>"d27b3426fcf24b6aa37d6245389aca856f5bb145",
+      #      :comment=>"Update setup option.",
+      #      :email=>"lan_chi@foxmail.com",
+      #      :date=>"2010-12-10 10:53:56 +0800"},
+      #     {:author=>"lan_chi",
+      #      :tree_hash=>"e5634753d20ca8af902345565363a1a741f67e1d",
+      #      :commit_hash=>"e0496745ede2d3b4ef43e3db4a466a74fe966c67",
+      #      :comment=>
+      #       "Rename file 'gitinit.py' to 'git-init.py', and add python setuptools 'setup.py'",
+      #      :email=>"lan_chi@foxmail.com",
+      #      :date=>"2010-12-09 16:38:47 +0800"}
+      #    ]
+      #   </code>
+      def get_log_list_by_path(user, repository, base, path)
         log_array = []
         execute(self, user, repository, ['log', base, '--format="format:%T%x09%H%x09%an%x09%ae%x09%ai%x09%s"', '--', path]).strip.each_line do |line|
           log = line.strip.split("\t")
@@ -228,19 +229,6 @@ module GitDrive
         #
       end
 
-      # list log with path
-      #  <shell>
-      #   inter@intern:~/gs.git$ git log master --max-count=1 -- setup.py
-      #   commit 52149f199127c8e65c5beb201368f82ba99edbb5
-      #   Author: lan_chi <lan_chi@foxmail.com>
-      #   Date:   Mon Dec 27 11:01:58 2010 +0800
-      #
-      #       Update files, release v0.1.0
-      #  </shell>
-      def get_log_list_by_path(user, repository, base, path)
-        #
-      end
-
       # list log with base, tree or file hash
       #  <shell>
       #   inter@intern:~/gs.git$ git log master --max-count=1
@@ -305,7 +293,6 @@ module GitDrive
       module_eval do
         include Command
       end
-
     end
 
     # any method placed here will apply to instaces

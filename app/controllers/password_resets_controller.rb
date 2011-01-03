@@ -1,3 +1,4 @@
+# coding: utf-8
 class PasswordResetsController < ApplicationController
   before_filter :require_no_user
   before_filter :find_user_with_perishable_token, :only => [ :edit, :update ]
