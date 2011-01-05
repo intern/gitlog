@@ -344,15 +344,8 @@ module GitAPI
     # Structural parameters and action command
     # raise GitApiParamsError exception if :user or :repository is nil
     def initialize(command, options = {})
-      options[:user] ||= nil
-      options[:repository] ||= nil
-      options[:new_repository] ||= nil
-      options[:new_user] ||= nil
-      if options[:user].nil? or options[:repository].nil?
-        raise GitApiParamsError
-      end
-      self.command = command
-      self.options = options
+      @command = command
+      @options = options
     end
 
     def exec
@@ -365,6 +358,7 @@ module GitAPI
     #       :user       *require
     #       :repository *require
     def init
+      implement_options :user, :repository
       run_command(
         :user => self.options[:user],
         :repository => self.options[:repository]
@@ -388,7 +382,8 @@ module GitAPI
     #       :new_user       option
     def move
       # move and copy are min 3 args :user :repository :new_repository
-      raise GitApiParamsError if self.options[:new_repository].nil?
+      implement_options :user, :repository, :new_repository
+      
       run_command(
         :user       => self.options[:user],
         :repository => self.options[:repository],
@@ -420,6 +415,13 @@ module GitAPI
         _command = "git-api --action #{command} #{options[:user]} #{options[:repository]} #{options[:new_repository]} #{options[:new_user]}".split(' ').join(' ').strip
         print _command
         Open3.popen3(_command)
+      end
+      
+      # need implement params, raise error if without the given list args.
+      def implement_options(*args)
+        args.each do |key|
+          raise GitApiParamsError if options[key.to_sym].nil?
+        end
       end
   end
 end
