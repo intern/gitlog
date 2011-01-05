@@ -301,7 +301,7 @@ end
 module GitAPI
   #'git_API_init', 'git_API_rename', 'git_API_move', 'git_API_copy', 'git_API_delete', 'git_API_exists'
   # the python git api list, Raise NotImplementedError exception if named action not in the list
-  ACTIONS_METHODS = [:init, :rename, :move, :copy, :delete, :exists]
+  ACTIONS_METHODS = [:init, :rename, :move, :copy, :delete, :exists, :run_key_hook]
 
   # Generic GitApi error exception class.
   class GitApiError < StandardError
@@ -407,12 +407,17 @@ module GitAPI
     #  Usage @see move
     alias :copy   :move
 
+    # Implement fit-api's run ssh key hook
+    def run_key_hook
+      run_command
+    end
+
     private
       # implement the python `git-api` methods
       # Usage:
       #    reference git-server of python API
       def run_command(options = {})
-        _command = "git-api --action #{command} #{options[:user]} #{options[:repository]} #{options[:new_repository]} #{options[:new_user]}".strip
+        _command = "git-api --action #{command} #{options[:user]} #{options[:repository]} #{options[:new_repository]} #{options[:new_user]}".split(' ').join(' ').strip
         print _command
         Open3.popen3(_command)
       end
