@@ -1,3 +1,4 @@
+=begin
 module Gitlog
   module Base
     def self.included(klass)
@@ -284,6 +285,8 @@ end
 
 #puts Action.methods.sort
 puts Action.get_hash_by_path('intern', 'git_server', 'master', 'setup.py')
+
+=end
 
 require 'open3'
 
