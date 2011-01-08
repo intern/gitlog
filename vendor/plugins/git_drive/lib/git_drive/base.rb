@@ -17,6 +17,8 @@ module GitDrive
       end
     end
   end
+  class Picker; end
 end
 
-ActiveRecord::Base.send :include, GitDrive::Base
+GitDrive::Picker.send :include, GitDrive::Base
+#ActiveRecord::Base.send :include, GitDrive::Base

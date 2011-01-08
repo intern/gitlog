@@ -21,7 +21,7 @@ class ApplicationController < ActionController::Base
       unless logged_in?
         respond_to do |format|
           format.html do
-            flash[:error] = "必须登录!"
+            flash[:error] = t("controllers.need_user_login")
             store_location
             redirect_to login_url
           end

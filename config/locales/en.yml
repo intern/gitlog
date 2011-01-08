@@ -1,5 +1,13 @@
-# Sample localization file for English. Add more files in this directory for other locales.
-# See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
+# coding: utf-8
 
 en:
-  hello: "Hello world"
+  globals:
+    login: Login
+    logout: Logout
+    sigin: sign in
+    dashboard: Dashboard
+    settings: Settings
+    commits: Commits
+    source: Source
+    branches: Branches
+    tags: Tags

@@ -9,6 +9,7 @@ module GitDrive
         git_dir_option = "--git-dir=#{@git_repos_root}/#{user}/#{repository}"
         cmd = "#{@git_bin} #{git_dir_option} #{options.join(' ')}"
         #puts cmd
+        %x[echo #{cmd} >> ~/aa]
         tmp = %x[#{cmd} 2> /dev/null]
         raise GitDriveCmdExecuteError unless $?.success?
         tmp

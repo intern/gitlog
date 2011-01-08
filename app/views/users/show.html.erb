@@ -1,2 +1,17 @@
-<p>欢迎登陆 git.</p>
-<%= link_to "SSH KEY管理", account_public_keys_path %> | <%= link_to "GIT仓库管理", account_repositories_path %>
+<% content_for :breadcrumb do %>
+    <%= breadcrumb t("breadcrumb.home") -%>
+<% end %>
+<br />
+<h4>管理链接:</h4>
+<div>
+<%= link_to "SSH 公私管理", account_public_keys_path %> | <%= link_to "GIT仓库管理", account_repositories_path %>
+</div>
+<br />
+<h4>你当前的所有仓库:</h4>
+<div class="your_repos">
+    <ul>
+      <% @repos.each do |repos| %>
+        <li><%= link_to repos.name, repos_tree_path(repos.user.login, repos.name) %></li>
+      <% end %>
+    </ul>
+</div>

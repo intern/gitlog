@@ -1,0 +1,13 @@
+<div class="tree">
+<table cellpadding="2" width="700" border="1">
+<% @tree.each do |i| %>
+   <tr>
+       <td><%= content_tag(:span, link_to(i[:path], "#{request.request_uri}/#{i[:path]}")) %></td>
+       <td><%= content_tag(:span, i[:type]) %></td>
+       <td><%= content_tag(:span, i[:mode]) %></td>
+       <td><%= content_tag(:span, i[:size]) %></td>
+       <td><%= content_tag(:span, i[:hash]) %></td>
+   </tr>
+<% end %>
+</table>
+</div>

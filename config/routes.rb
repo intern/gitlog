@@ -29,7 +29,6 @@ Gitlog::Application.routes.draw do
     match '/:token/edit', :to => :edit, :via => [ :get ], :as => :edit
   end
 
-
   #get "login",    :to => 'user_sessions#new',     :as => 'login'
 
   #post "login",   :to => 'user_sessions#create',  :as => 'login_post'
@@ -37,6 +36,16 @@ Gitlog::Application.routes.draw do
   #match "logout", :to => 'user_sessions#destroy', :as => 'logout'
   match "account/activate/:token", :to => 'users#activate', :as => 'account_activate'
 
+  # Git viewer router here
+  controller :git_viewer do
+    match '/:username/:repository(/tree(/:tree_hash(/*path)))',     :to => :tree,   :as => :repos_tree
+    match '/:username/:repository/commit/:tree_hash',:to => :commit, :as => :repos_commit
+    match '/:username/:repository/commits',          :to => :commits,:as => :repos_commits
+    match '/:username/:repository/branch',           :to => :branch, :as => :repos_branch
+    match '/:username/:repository/branchs',          :to => :branchs,:as => :repos_branchs
+    match '/:username/:repository/tags',             :to => :tags,   :as => :repos_tags
+    match '/:username/:repository/tag',              :to => :tag,    :as => :repos_tag
+  end
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

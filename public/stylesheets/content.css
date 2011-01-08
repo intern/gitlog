@@ -1,0 +1,15 @@
+/** home page **/
+.your_repos ul, .your_repos li{
+    list-style: square;
+    list-style-position: inside;
+    line-height: 25px;
+    padding: 5px;
+}
+.tree {
+    width: 600px;
+}
+.tree div {
+    height: 20px;
+    padding: 5px;
+    border: 1px solid #555;
+}

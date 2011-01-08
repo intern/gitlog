@@ -33,7 +33,7 @@ module GitDrive
       #   commit
       # </shell>
       #  @return string blob | tree | commit
-      def get_type_by_hash(user, repository, base, hash)
+      def get_type_by_hash(user, repository, hash)
         execute(self, user, repository, ['cat-file', '-t', hash]).strip
       end
 
@@ -189,11 +189,11 @@ module GitDrive
           commit_data << {
             :commit_hash => $1,
             :parent_hase => $2,
-            :tree_hash => $3,
-            :author => $4,
-            :email => $5,
-            :date => $6,
-            :comment => $7
+            :tree_hash   => $3,
+            :author      => $4,
+            :email       => $5,
+            :date        => $6,
+            :comment     => $7
           }
         end
         commit_data
@@ -215,7 +215,6 @@ module GitDrive
         commit_data = []
         commits = execute(self, user, repository, ['rev-list', '--format="format:%P%x09%T%x09%an%x09%ae%x09%ai%x09%s"', "--max-count=#{count}", base, '--', path]).strip
         commits.gsub(/commit ([0-9a-fA-F]{40})\n([0-9a-fA-F]{40})\t([0-9a-fA-F]{40})\t(.+)\t(.+)\t(.+)\t(.+)/) do |p|
-          puts p
           commit_data << {
             :commit_hash => $1,
             :parent_hase => $2,
@@ -229,6 +228,28 @@ module GitDrive
         commit_data
       end
 
+      # List the tree
+      #  <shell>
+      #   intern@intern-desktop:~/git/gs.git$ git ls-tree -l master ./
+      #   100644 blob 86ea89b680fa857e77c72ebcee3f33d005735b36     192    README
+      #   040000 tree 515a87f210ce8c62414329fd894fa9e0d31b7bb2       -    git_server
+      #   100644 blob 07931573c4c384e012727c956c5c825b605b96bb    1510    setup.py
+      #  </shell>
+      # @return array
+      def get_tree_list_by_path(user, repository, base, path = nil)
+        lists = []
+        execute(self, user, repository, ['ls-tree', '-l', base, (path || './')]).each_line do |line|
+          list = line.strip.split(" ") #gsub(/commit ([0-9a-fA-F]{40})\n([0-9a-fA-F]{40})\t([0-9a/)
+          lists << {
+            :mode => list.shift,
+            :type => list.shift,
+            :hash => list.shift,
+            :size => list.shift.to_i,
+            :path => list.shift
+          }
+        end
+        lists
+      end
       # list log with base, tree or file hash
       #  <shell>
       #   inter@intern:~/gs.git$ git log master --max-count=1

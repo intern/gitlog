@@ -1,3 +1,6 @@
+<% content_for :breadcrumb do %>
+    <%= breadcrumb t("breadcrumb.home"), t("breadcrumb.ssh_setting") -%>
+<% end %>
 <h1>公钥</h1>
 <p>标识: <%= h (@ssh.title) %></p>
 <p>KEY: <%= h (@ssh.ssh_key) %></p>

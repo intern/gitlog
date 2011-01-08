@@ -1,37 +1,33 @@
+<% content_for :breadcrumb do %>
+    <%= breadcrumb t("breadcrumb.home"), t("breadcrumb.repo_setting") -%>
+<% end %>
 <h3>Projects仓库管理</h3>
-<table>
-	<colgroup>
-		<col width="100">
-		<col width="100">
-		<col width="100">
-		<col width="40">
-		<col width="100">
-	</colgroup>
-	<tr>
-		<th>仓库名</th>
-		<th>Location</th>
-		<th>描述</th>
-		<th>私有</th>
-		<th>操作</th>
-	</tr>
+<table width="750" cellpadding="2" border="1">
+  <tr>
+    <th>仓库名</th>
+    <th>Location</th>
+    <th>描述</th>
+    <th>私有</th>
+    <th>操作</th>
+  </tr>
 <% @projects.each do |project| %>
   <tr>
-  	<td><%= project.name %></td>
-	<td><%= project.location %></td>
-	<td><%= project.description %></td>
-	<td align="center"><%= project.protected ? "是" : "否" %></td>
- 	<td>
- 		<%= link_to "查看", account_repository_path(project) %>
- 		<%= link_to "编辑", edit_account_repository_path(project) %>
-		<%= link_to "删除", account_repository_path(project), :confirm => "确定要删除?", :method => :delete %>
-	</td>
+    <td><%= project.name %></td>
+    <td><%= project.location %></td>
+    <td><%= project.description %></td>
+    <td align="center"><%= project.protected ? "是" : "否" %></td>
+    <td>
+        <%= link_to "查看", account_repository_path(project) %>
+        <%= link_to "编辑", edit_account_repository_path(project) %>
+        <%= link_to "删除", account_repository_path(project), :confirm => "确定要删除?", :method => :delete %>
+    </td>
   </tr>
 <% end %>
 <% unless @projects.size > 0 %>
   <tr>
-  	<td colspan="5" align="center">
-  		还没有仓库,请<%= link_to "添加仓库", new_account_repository_path %>.
-	</td>
+    <td colspan="5" align="center">
+      还没有仓库,请<%= link_to "添加仓库", new_account_repository_path %>.
+  </td>
   </tr>
 <% end %>
 </table>

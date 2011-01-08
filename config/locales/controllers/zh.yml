@@ -1,0 +1,5 @@
+# coding: utf-8
+
+zh:
+  controllers:
+    need_user_login: 您必须登录才能访问!

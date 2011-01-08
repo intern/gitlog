@@ -67,6 +67,10 @@ class ActsAsGitDriveTest < Test::Unit::TestCase
   def test_get_commit_info_by_path
     assert_equal "test_get_commit_info_by_path", Wickwall.get_commit_info_by_path('git', 'gs.git', 'master', 'setup.py')
   end
+
+  def test_get_tree_list_by_path
+    assert_equal "test_get_tree_list_by_path", Wickwall.get_tree_list_by_path('git', 'gs.git', 'master')
+  end
 end
 
 

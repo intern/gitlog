@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_filter :require_user,          :except => [ :activate, :new, :create ]
+  before_filter :require_user,          :except => [ :activate, :new, :create, :update ]
   before_filter :require_no_user,       :only   => [ :new, :create, :activate ]
 
   def index
@@ -19,6 +19,7 @@ class UsersController < ApplicationController
 
   def show
     @user = current_user
+    @repos = @user.projects
     #render :action => :show
   end
 
@@ -28,6 +29,16 @@ class UsersController < ApplicationController
       UserMailer.register_activate_email(@user).deliver
     else
       render :action => :new
+    end
+  end
+
+  def update
+    @user = current_user
+    if @user.update_attributes(params[:user])
+      flash[:notice] = t("globals.account_updated_success")
+      render :action => :edit
+    else
+      render :action => :edit
     end
   end
 

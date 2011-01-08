@@ -1,9 +1,12 @@
+<% content_for :breadcrumb do %>
+    <%= breadcrumb t("breadcrumb.home"), t("breadcrumb.ssh_setting") -%>
+<% end %>
 <h1>更新SSH public key</h1>
 <%= form_for @ssh, :url => account_public_key_path do |f| %>
   <%= f.error_messages %>
   <p><%= f.label :title %></p>
   <p><%= f.text_field :title %></p>
-  
+
   <p><%= f.label :ssh_key %></p>
   <p><%= f.text_area :ssh_key, :rows => 10 %></p>
   <p><%= f.submit %>  <%= link_to "删除", account_public_key_path(@ssh),:confirm => "确定要删除?", :method => :delete %></p>

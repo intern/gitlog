@@ -1,0 +1,22 @@
+<% content_for :navigation_list do %>
+    <li><%= link_to t("globals.source"), "#" %></li>
+    <li><%= link_to t("globals.branches"), "#" %></li>
+    <li><%= link_to t("globals.commits"), "#" %></li>
+    <li><%= link_to t("globals.tags"), "#" %></li>
+<% end %>
+<div id="header">
+    <div class="navigation">
+        <ul>
+            <%= yield :navigation_list %>
+            <% if logged_in? -%>
+                <li class="fr"><%= link_to t("globals.logout"), logout_path %></li>
+                <li class="fr"><%= link_to t("globals.settings"), edit_account_path %></li>
+                <li class="fr"><%= link_to t("globals.dashboard"), account_path %></li>
+                <li class="fr"><%= t(".welcome_xxx", :username => current_user.login) %></li>
+            <% else -%>
+                <li class="fr"><%= link_to t("globals.sigin"), new_account_path %></li>
+                <li class="fr"><%= link_to t("globals.login"), login_path %></li>
+            <% end -%>
+        </ul>
+    </div>
+</div>

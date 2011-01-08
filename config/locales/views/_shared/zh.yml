@@ -1,0 +1,6 @@
+# coding: utf-8
+
+zh:
+  _shared:
+    header:
+      welcome_xxx: 欢迎登陆 %{username}

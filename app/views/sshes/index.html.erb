@@ -1,29 +1,31 @@
+<% content_for :breadcrumb do %>
+    <%= breadcrumb t("breadcrumb.home"), t("breadcrumb.ssh_setting") -%>
+<% end %>
+
 <h3>SSH 公钥管理</h3>
-<table>
-	<colgroup>
-		<col width="100">
-		<col width="100">
-	</colgroup>
-	<tr>
-		<th>标示</th>
-		<th>操作</th>
-	</tr>
+<table cellpadding="2" border="1" width="500">
+    <tr>
+        <th>标示</th>
+        <th>操作</th>
+    </tr>
 <% @sshes.each do |key| %>
-  <tr>
-  	<td><%= key.title %></td>
- 	<td>
- 		<%= link_to "查看", account_public_key_path(key) %>
- 		<%= link_to "编辑", edit_account_public_key_path(key) %>
-		<%= link_to "删除", account_public_key_path(key), :confirm => "确定要删除?", :method => :delete %>
-	</td>
-  </tr>
+    <tr>
+        <td>
+            <%= key.title %>
+        </td>
+        <td>
+            <%= link_to "查看", account_public_key_path(key) %>
+            <%= link_to "编辑", edit_account_public_key_path(key) %>
+            <%= link_to "删除", account_public_key_path(key), :confirm => "确定要删除?", :method => :delete %>
+        </td>
+    </tr>
 <% end %>
 <% unless @sshes.size > 0 %>
-  <tr>
-  	<td colspan="2" align="center">
-  		还没有仓库,请<%= link_to "添加SSH公钥", new_account_public_key_path %>.
-	</td>
-  </tr>
+    <tr>
+        <td colspan="2" align="center">
+          还没有仓库,请<%= link_to "添加SSH公钥", new_account_public_key_path %>.
+        </td>
+    </tr>
 <% end %>
 </table>
 <p><%= link_to "添加 Public key", new_account_public_key_path%></p>

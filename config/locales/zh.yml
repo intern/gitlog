@@ -1,4 +1,19 @@
+# coding: utf-8
 
 zh:
-  hello: '你好!'
-  test: '<:测试:>'
+  globals:
+    login: 登录
+    logout: 注销
+    sigin: 注册
+    dashboard: 主页
+    settings: 账户设置
+    commits: 提交
+    source: 源码
+    branches: 分支
+    tags: 标签
+    account_updated_success: 账户更新成功!
+
+  breadcrumb:
+    home: 主页
+    ssh_setting: 公钥管理
+    repo_setting: 仓库管理
