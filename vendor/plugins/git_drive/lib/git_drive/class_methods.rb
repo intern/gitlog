@@ -169,14 +169,14 @@ module GitDrive
       #  @return array
       #    [{:author=>"lan_chi",
       #      :tree_hash=>"2a3f590222ac1327cec19aeb8e3f86a4cd1a23fc",
-      #      :parent_hase=>"31898bf7b711a9c8c0c7191e489c904c22294079",
+      #      :parent_hash=>"31898bf7b711a9c8c0c7191e489c904c22294079",
       #      :commit_hash=>"c9c0a096346adff7db2f2a33a5e13e0f69c2e2b6",
       #      :comment=>"Update readme file.",
       #      :email=>"lan_chi@foxmail.com",
       #      :date=>"2010-12-27 11:25:40 +0800"},
       #     {:author=>"lan_chi",
       #      :tree_hash=>"be6cf8dc64d377f649fb291adf5c61d3905e882d",
-      #      :parent_hase=>"52149f199127c8e65c5beb201368f82ba99edbb5",
+      #      :parent_hash=>"52149f199127c8e65c5beb201368f82ba99edbb5",
       #      :commit_hash=>"31898bf7b711a9c8c0c7191e489c904c22294079",
       #      :comment=>"Release v0.1.0",
       #      :email=>"lan_chi@foxmail.com",
@@ -188,7 +188,7 @@ module GitDrive
         commits.gsub(/commit ([0-9a-fA-F]{40})\n([0-9a-fA-F]{40})\t([0-9a-fA-F]{40})\t(.+)\t(.+)\t(.+)\t(.+)/) do |p|
           commit_data << {
             :commit_hash => $1,
-            :parent_hase => $2,
+            :parent_hash => $2,
             :tree_hash   => $3,
             :author      => $4,
             :email       => $5,

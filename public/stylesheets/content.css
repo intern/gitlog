@@ -6,10 +6,27 @@
     padding: 5px;
 }
 .tree {
-    width: 600px;
+    line-height: 16px;
 }
-.tree div {
-    height: 20px;
-    padding: 5px;
-    border: 1px solid #555;
+.odd {
+    background-color: #f6f6f0;
+}
+.commits div {
+    padding: 10px 0;
+}
+.blob {
+    font-family: 'Bitstream Vera Sans Mono', Courier, monospace;
+}
+.blob pre {
+    margin: 0;
+    padding: 0;
+    line-height: 14px;
+}
+.blob pre.line_number {
+    background-color: #ECECEC;
+    border-right: 1px solid #DDD;
+    color: #AAA;
+    padding: 1em 0.5em;
+    text-align: right;
+    margin-right: 10px;
 }
