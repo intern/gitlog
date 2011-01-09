@@ -1,18 +1,17 @@
 <% content_for :navigation_list do %>
     <li><%= link_to t("globals.source"), repos_tree_path(params[:username], params[:repository]) %></li>
-    <li><%= link_to t("globals.branches"), "#" %></li>
+    <!--<li><%= link_to t("globals.branches"), "#" %></li>-->
     <li><%= link_to t("globals.commits"), repos_commits_path(params[:username], params[:repository]) %></li>
-    <li><%= link_to t("globals.tags"), "#" %></li>
+    <!--<li><%= link_to t("globals.tags"), "#" %></li>-->
 <% end %>
 <%= content_tag :div, file_breadcrumb, :class => "breadcrumb" %>
 <% number, code_block = parser_code(@code) %>
-
 <div class="blob">
+        <div class="blob-header">
+            <%= content_tag :span, image_tag("icons/txt.png") -%>
+            <%= content_tag :span, number_to_human_size(@blob_info[:size]) %>
+        </div>
     <table cellspacing="0" cellpadding="0" border="0">
-        <tr>
-            <th><%= image_tag("icons/txt.png") -%></th>
-            <th>文件模式</th>
-        </tr>
         <tr>
             <td><pre class="line_number"><%= number.join("\n").html_safe %></pre></td>
             <td><pre class="line_number2"><%= code_block.join("\n").html_safe %></pre></td>

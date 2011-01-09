@@ -1,8 +1,8 @@
 <% content_for :navigation_list do %>
     <li><%= link_to t("globals.source"), repos_tree_path(params[:username], params[:repository]) %></li>
-    <li><%= link_to t("globals.branches"), "#" %></li>
+    <!--<li><%= link_to t("globals.branches"), "#" %></li>-->
     <li><%= link_to t("globals.commits"), repos_commits_path(params[:username], params[:repository]) %></li>
-    <li><%= link_to t("globals.tags"), "#" %></li>
+    <!--<li><%= link_to t("globals.tags"), "#" %></li>-->
 <% end %>
 <div class="commits">
     <% @commits.each do |commit| %>
@@ -11,9 +11,9 @@
         <p>tree:   <%= commit[:tree_hash]%></p>
         <p>parent: <%= commit[:parent_hash]%></p>
         <p>commit: <%= commit[:commit_hash]%></p>
-        <p>comment: <%= commit[:comment]%></p>
+        <p>comment:<%= commit[:comment]%></p>
         <p>email: <%= commit[:email]%></p>
-        <p>date: <%= commit[:date]%></p>
+        <p>date:  <%= l(commit[:date].to_time)%></p>
     </div>
     <% end %>
 </div>

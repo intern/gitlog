@@ -2,18 +2,22 @@ module GitViewerHelper
   def file_breadcrumb
     temp = ""
     breadcrumb = [link_to( params[:repository], repos_tree_path(params[:username], params[:repository], params[:tree_hash]))]
-    (params[:path] || "").split("/").each do |path|
+    path = (params[:path] || "").split("/")
+    last_path = path.pop
+    path.each do |path|
       breadcrumb << link_to(path, repos_tree_path(params[:username], params[:repository], params[:tree_hash], "#{temp}#{path}"))
       temp = "#{temp}#{path}/"
     end
+    breadcrumb << last_path unless last_path.nil?
     breadcrumb.join(" › ").html_safe
   end
 
   def file_path(file)
-    unless params[:path].nil?
-      "#{params[:path]}/#{file[:path]}"
+    path = params[:path].nil? ? "#{file[:path]}" : "#{params[:path]}/#{file[:path]}"
+    if file[:type] == 'tree'
+      repos_tree_path(params[:username],params[:repository], params[:tree_hash], path)
     else
-      "#{file[:path]}"
+      repos_blob_path(params[:username],params[:repository], params[:tree_hash], path)
     end
   end
 

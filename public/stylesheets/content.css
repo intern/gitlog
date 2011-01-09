@@ -16,17 +16,25 @@
 }
 .blob {
     font-family: 'Bitstream Vera Sans Mono', Courier, monospace;
+    border: 1px solid #DDD;
+}
+.blob-header {
+    height: 20px;
+    background-color: #ECECEC;
+    padding: 3px 0 3px 10px;
+    line-height: 20px;
+    font-size: 12px;
 }
 .blob pre {
     margin: 0;
     padding: 0;
-    line-height: 14px;
+    line-height: 12px;
 }
 .blob pre.line_number {
     background-color: #ECECEC;
     border-right: 1px solid #DDD;
     color: #AAA;
-    padding: 1em 0.5em;
+    padding: 5px;
     text-align: right;
     margin-right: 10px;
 }

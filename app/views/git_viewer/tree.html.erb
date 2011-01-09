@@ -1,8 +1,8 @@
 <% content_for :navigation_list do %>
     <li><%= link_to t("globals.source"), repos_tree_path(params[:username], params[:repository]) %></li>
-    <li><%= link_to t("globals.branches"), "#" %></li>
+    <!--<li><%= link_to t("globals.branches"), "#" %></li>-->
     <li><%= link_to t("globals.commits"), repos_commits_path(params[:username], params[:repository]) %></li>
-    <li><%= link_to t("globals.tags"), "#" %></li>
+    <!--<li><%= link_to t("globals.tags"), "#" %></li>-->
 <% end %>
 <%= content_tag :div, file_breadcrumb, :class => "breadcrumb" %>
 <% if @tree.count %>
@@ -22,13 +22,14 @@
                <% else %>
                <%= image_tag("icons/txt.png") -%>
                <% end %>
-               <%= content_tag(:span, link_to(file[:path], repos_tree_path(params[:username],params[:repository], params[:tree_hash], file_path(file)))) %>
+               <%= content_tag(:span, link_to(file[:path], file_path(file) )) %>
            </td>
            <td><%= content_tag(:span, file[:mode]) %></td>
            <td><%= content_tag(:span, number_to_human_size(file[:size])) %></td>
            <td><%= content_tag(:span, file[:hash]) %></td>
        </tr>
     <% end %>
+
     </table>
 </div>
 <% end %>

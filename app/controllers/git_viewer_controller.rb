@@ -1,6 +1,7 @@
 class GitViewerController < ApplicationController
   before_filter :user_and_repository_check?
-  before_filter :set_tree_hash_and_uri, :only => [:tree]
+  before_filter :set_hash_and_uri, :only => [:blob, :tree]
+  before_filter :find_blob_info, :only => [:blob]
 
   def commits
     @commits = GitPicker.get_commit_info_by_hash(params[:username], "#{params[:repository]}.git", 'master')
@@ -10,20 +11,11 @@ class GitViewerController < ApplicationController
   end
 
   def tree
-    params[:tree_hash] ||= "master"
-    if params[:path].nil?
-      hash = GitPicker.get_hash_by_name(params[:username], "#{params[:repository]}.git", params[:tree_hash])
-    else
-      hash = GitPicker.get_hash_by_path(params[:username], "#{params[:repository]}.git", params[:tree_hash], params[:path])
-      type = GitPicker.get_type_by_hash(params[:username], "#{params[:repository]}.git", hash)
-    end
+    @tree = GitPicker.get_tree_list_by_path(params[:username], "#{params[:repository]}.git", @current_hash)
+  end
 
-    if type.nil? or type == 'tree'
-      @tree = GitPicker.get_tree_list_by_path(params[:username], "#{params[:repository]}.git", hash)
-    else
-      @code = GitPicker.get_blob_plain_by_hash(params[:username], "#{params[:repository]}.git", hash)
-      render :blob
-    end
+  def blob
+    @code = GitPicker.get_blob_plain_by_hash(params[:username], "#{params[:repository]}.git", @current_hash)
   end
 
   def branchs
@@ -45,8 +37,19 @@ class GitViewerController < ApplicationController
       end
     end
 
-    def set_tree_hash_and_uri
+    def set_hash_and_uri
       params[:tree_hash] ||= "master"
-
+      @tree_hash = params[:tree_hash] || "master"
+      if params[:path].nil?
+        @current_hash = GitPicker.get_hash_by_name(params[:username], "#{params[:repository]}.git", params[:tree_hash])
+      else
+        @current_hash = GitPicker.get_hash_by_path(params[:username], "#{params[:repository]}.git", params[:tree_hash], params[:path])
+#        type = GitPicker.get_type_by_hash(params[:username], "#{params[:repository]}.git", hash)
+      end
     end
+
+    def find_blob_info
+      @blob_info = GitPicker.get_tree_list_by_path(params[:username], "#{params[:repository]}.git", @tree_hash, params[:path] ).first
+    end
+
 end
