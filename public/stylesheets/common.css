@@ -90,6 +90,10 @@ input[type="text"],input[type="password"], textarea {
 .breadcrumb {
     height: 28px;
     line-height: 28px;
+    padding: 5px;
+}
+.breadcrumb a{
+    text-decoration: none;
 }
 
 /** footer style **/

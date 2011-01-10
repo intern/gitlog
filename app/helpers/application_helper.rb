@@ -8,6 +8,6 @@ module ApplicationHelper
   end
 
   def breadcrumb(*value)
-    content_tag(:div, value.join(" › "), :class => "breadcrumb")
+    content_tag(:div, value.join("&raquo;"), :class => "breadcrumb")
   end
 end

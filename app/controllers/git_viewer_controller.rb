@@ -4,18 +4,18 @@ class GitViewerController < ApplicationController
   before_filter :find_blob_info, :only => [:blob]
 
   def commits
-    @commits = GitPicker.get_commit_info_by_hash(params[:username], "#{params[:repository]}.git", 'master')
+    @commits = GitPicker.get_commit_info_by_hash(params[:username], params[:repository], 'master')
   end
 
   def commit
   end
 
   def tree
-    @tree = GitPicker.get_tree_list_by_path(params[:username], "#{params[:repository]}.git", @current_hash)
+    @tree = GitPicker.get_tree_list_by_path(params[:username], params[:repository], @current_hash)
   end
 
   def blob
-    @code = GitPicker.get_blob_plain_by_hash(params[:username], "#{params[:repository]}.git", @current_hash)
+    @code = GitPicker.get_blob_plain_by_hash(params[:username], params[:repository], @current_hash)
   end
 
   def branchs
@@ -39,17 +39,17 @@ class GitViewerController < ApplicationController
 
     def set_hash_and_uri
       params[:tree_hash] ||= "master"
-      @tree_hash = params[:tree_hash] || "master"
+      @tree_hash = params[:tree_hash]
       if params[:path].nil?
-        @current_hash = GitPicker.get_hash_by_name(params[:username], "#{params[:repository]}.git", params[:tree_hash])
+        @current_hash = GitPicker.get_hash_by_name(params[:username], params[:repository], params[:tree_hash])
       else
-        @current_hash = GitPicker.get_hash_by_path(params[:username], "#{params[:repository]}.git", params[:tree_hash], params[:path])
+        @current_hash = GitPicker.get_hash_by_path(params[:username], params[:repository], params[:tree_hash], params[:path])
 #        type = GitPicker.get_type_by_hash(params[:username], "#{params[:repository]}.git", hash)
       end
     end
 
     def find_blob_info
-      @blob_info = GitPicker.get_tree_list_by_path(params[:username], "#{params[:repository]}.git", @tree_hash, params[:path] ).first
+      @blob_info = GitPicker.get_tree_list_by_path(params[:username], params[:repository], @tree_hash, params[:path] ).first
     end
 
 end

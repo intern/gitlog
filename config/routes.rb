@@ -41,7 +41,7 @@ Gitlog::Application.routes.draw do
     match '/:username/:repository(/tree(/:tree_hash(/*path)))',    :to => :tree,   :as => :repos_tree
     match '/:username/:repository(/blob/:tree_hash(/*path))',     :to => :blob,   :as => :repos_blob
     match '/:username/:repository/commit/:tree_hash',:to => :commit, :as => :repos_commit
-    match '/:username/:repository/commits',          :to => :commits,:as => :repos_commits
+    match '/:username/:repository/commits(/:tree_hash(/*path))',          :to => :commits,:as => :repos_commits
     match '/:username/:repository/branch',           :to => :branch, :as => :repos_branch
     match '/:username/:repository/branchs',          :to => :branchs,:as => :repos_branchs
     match '/:username/:repository/tags',             :to => :tags,   :as => :repos_tags
