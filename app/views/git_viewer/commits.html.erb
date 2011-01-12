@@ -5,15 +5,32 @@
     <!--<li><%= link_to t("globals.tags"), "#" %></li>-->
 <% end %>
 <div class="commits">
+  <% if params[:path]%>
     <% @commits.each do |commit| %>
     <div class="<%= cycle 'even', 'odd' %>">
+        <p><%= image_tag avatar_url(commit[:email]) %></p>
         <p>author: <%= commit[:author]%></p>
-        <p>tree:   <%= link_to commit[:tree_hash], repos_tree_path(params[:username], params[:repository], commit[:tree_hash]) %></p>
-        <p>parent: <%= link_to commit[:parent_hash], repos_commit_path(params[:username], params[:repository], commit[:parent_hash]) %></p>
+        <p>tree:   <%= link_to commit[:tree_hash], repos_tree_path(params[:username], params[:repository], commit[:commit_hash]) %></p>
         <p>commit: <%= link_to commit[:commit_hash], repos_commit_path(params[:username], params[:repository], commit[:commit_hash]) %></p>
         <p>comment:<%= commit[:comment]%></p>
         <p>email: <%= commit[:email]%></p>
         <p>date:  <%= l(commit[:date].to_time)%></p>
     </div>
     <% end %>
+  <% else %>
+    <% @commits.each do |commit| %>
+    <div class="<%= cycle 'even', 'odd' %>">
+        <p><%= image_tag avatar_url(commit[:email]) %></p>
+        <p>author: <%= commit[:author]%></p>
+        <p>tree:   <%= link_to commit[:tree_hash], repos_tree_path(params[:username], params[:repository], commit[:commit_hash]) %></p>
+        <% unless commit[:parent_hash].nil? %>
+        <p>parent: <%= link_to commit[:parent_hash], repos_commit_path(params[:username], params[:repository], commit[:parent_hash]) %></p>
+        <% end -%>
+        <p>commit: <%= link_to commit[:commit_hash], repos_commit_path(params[:username], params[:repository], commit[:commit_hash]) %></p>
+        <p>comment:<%= commit[:comment]%></p>
+        <p>email: <%= commit[:email]%></p>
+        <p>date:  <%= l(commit[:date].to_time)%></p>
+    </div>
+    <% end %>
+  <% end %>
 </div>

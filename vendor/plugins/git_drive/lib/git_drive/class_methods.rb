@@ -185,7 +185,7 @@ module GitDrive
       def get_commit_info_by_hash(user, repository, base, count = 30)
         commit_data = []
         commits = execute(self, user, repository, ['rev-list', '--format="format:%P%x09%T%x09%an%x09%ae%x09%ai%x09%s"', "--max-count=#{count}", base]).strip
-        commits.gsub(/commit ([0-9a-fA-F]{40})\n([0-9a-fA-F]{40})\t([0-9a-fA-F]{40})\t(.+)\t(.+)\t(.+)\t(.+)/) do |p|
+        commits.gsub(/commit ([0-9a-fA-F]{40})\n([0-9a-fA-F]{40})?\t([0-9a-fA-F]{40})\t(.+)\t(.+)\t(.+)\t(.+)/) do |p|
           commit_data << {
             :commit_hash => $1,
             :parent_hash => $2,
