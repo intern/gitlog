@@ -4,6 +4,7 @@
     <li><%= link_to t("globals.commits"), repos_commits_path(params[:username], params[:repository]) %></li>
     <!--<li><%= link_to t("globals.tags"), "#" %></li>-->
 <% end %>
+<%= link_to "Histroy", repos_commits_path(params[:username], params[:repository], params[:tree_hash], params[:path]) %>
 <%= content_tag :div, file_breadcrumb, :class => "breadcrumb" %>
 <% number, code_block = parser_code(@code) %>
 <div class="blob">

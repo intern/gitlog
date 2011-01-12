@@ -1,2 +1,9 @@
+<% content_for :navigation_list do %>
+    <li><%= link_to t("globals.source"), repos_tree_path(params[:username], params[:repository]) %></li>
+    <!--<li><%= link_to t("globals.branches"), "#" %></li>-->
+    <li><%= link_to t("globals.commits"), repos_commits_path(params[:username], params[:repository]) %></li>
+    <!--<li><%= link_to t("globals.tags"), "#" %></li>-->
+<% end %>
+
 <h1>GitViewer#commit</h1>
 <p>Find me in app/views/git_viewer/commit.html.erb</p>

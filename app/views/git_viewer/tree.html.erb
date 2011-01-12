@@ -9,9 +9,8 @@
         <p><%= image_tag avatar_url(@last_commit[:email]) %></p>
         <p>author: <%= @last_commit[:author]%></p>
         <p>tree:   <%= link_to @last_commit[:tree_hash], repos_tree_path(params[:username], params[:repository], @last_commit[:commit_hash]) %></p>
-        <%= @last_commit[:parent_hash] %>
         <% unless @last_commit[:parent_hash].nil? %>
-        <p>parent: <%= link_to @last_commit[:parent_hash], repos_commit_path(params[:username], params[:repository], @last_commit[:parent_hash]) %></p>
+        <p>parent: <%= link_to @last_commit[:parent_hash], repos_tree_path(params[:username], params[:repository], @last_commit[:parent_hash]) %></p>
         <% end -%>
         <p>commit: <%= link_to @last_commit[:commit_hash], repos_commit_path(params[:username], params[:repository], @last_commit[:commit_hash]) %></p>
         <p>comment:<%= @last_commit[:comment]%></p>
