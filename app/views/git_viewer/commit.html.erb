@@ -5,5 +5,34 @@
     <!--<li><%= link_to t("globals.tags"), "#" %></li>-->
 <% end %>
 
-<h1>GitViewer#commit</h1>
+<% if @last_commit  %>
+<div>
+        <p><%= image_tag avatar_url(@last_commit[:email]) %></p>
+        <p>author: <%= @last_commit[:author]%></p>
+        <p>tree:   <%= link_to @last_commit[:tree_hash], repos_tree_path(params[:username], params[:repository], @last_commit[:commit_hash]) %></p>
+        <% unless @last_commit[:parent_hash].nil? %>
+        <p>parent: <%= link_to @last_commit[:parent_hash], repos_tree_path(params[:username], params[:repository], @last_commit[:parent_hash]) %></p>
+        <% end -%>
+        <p>commit: <%= link_to @last_commit[:commit_hash], repos_commit_path(params[:username], params[:repository], @last_commit[:commit_hash]) %></p>
+        <p>comment:<%= @last_commit[:comment]%></p>
+        <p>email: <%= @last_commit[:email]%></p>
+        <p>date:  <%= l(@last_commit[:date].to_time)%></p>
+</div>
+<% end %>
+<div class="margin_p">
+   <% @diffs.each do |diff| %>
+    <% number, code_block = parser_code(diff[:file_change].strip) %>
+   <div class="blob">
+    <div class="blob-header">
+      <%= content_tag :span, image_tag("icons/txt.png") -%>
+    </div>
+    <table cellspacing="0" cellpadding="0" border="0">
+        <tr>
+            <td><pre class="line_number"><%= number.join("\n").html_safe %></pre></td>
+            <td><pre class="line_number2"><%= code_block.join("\n").html_safe %></pre></td>
+        </tr>
+     </table>
+    </div>
+   <% end %>
+</div>
 <p>Find me in app/views/git_viewer/commit.html.erb</p>

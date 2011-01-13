@@ -297,8 +297,25 @@ module GitDrive
       end
 
       # To compare blob content
-      def git_diff_plain_with_commit_hash(user, repository, hash_a, hash_b)
-        #
+      def git_diff_plain_with_commit_hash(user, repository, hash_a, hash_b = nil)
+        lists = []
+        all = execute(self, user, repository, ['diff-tree', '-r', '-p', '--no-commit-id', "--full-index", hash_a])
+        all.gsub(/(diff --git a\/([\w|-|_|\.|\/]+) b\/([\w|-|_|\.|\/]+)\n*([\w| ]+)?\nindex ([0-9a-fA-F]{40})\.\.([0-9a-fA-F]{40}) *([0-7]{6})?([\s\S]+?)@@ ([\d|\-|\+|,| ]+) @@[ ]*[\w]*((\n[ |\-|\+][\S| |\t]*)+)+)+/) do |i|
+          lists << {
+            :all => $1,
+            :a_file => $2,
+            :b_file => $3,
+            :flag => $4,
+            :a_hash => $5,
+            :b_hash => $6,
+            :file_mode => $7,
+            :file_from_to => $8,
+            :change_line_number => $9,
+            :file_change => $10,
+            :file_last_line => $11
+          }
+        end
+        lists
       end
 
       # To compare blob content

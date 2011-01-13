@@ -4,7 +4,7 @@ class GitViewerController < ApplicationController
   before_filter :set_default_commit_hash, :only => [:commit, :commits]
   before_filter :set_path_hash,    :only => [:blob, :tree]
   before_filter :find_blob_info,   :only => [:blob]
-  before_filter :find_last_commit, :only => [:blob, :tree]
+  before_filter :find_last_commit, :only => [:blob, :tree, :commit]
 
   def tree
     @tree = GitPicker.get_tree_list_by_path(params[:username], params[:repository], @path_hash)
@@ -24,8 +24,7 @@ class GitViewerController < ApplicationController
   end
 
   def commit
-    if true
-    end
+    @diffs = GitPicker.git_diff_plain_with_commit_hash(params[:username], params[:repository], params[:commit_hash])
   end
 
   def branchs
@@ -69,6 +68,6 @@ class GitViewerController < ApplicationController
     end
 
     def find_last_commit
-      @last_commit = GitPicker.get_commit_info_by_hash(params[:username], params[:repository], params[:tree_hash], 1).first
+      @last_commit = GitPicker.get_commit_info_by_hash(params[:username], params[:repository], params[:tree_hash] || params[:commit_hash], 1).first
     end
 end
