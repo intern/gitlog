@@ -1,0 +1,15 @@
+# coding: utf-8
+
+zh:
+  git_viewer:
+    commit:
+      author: 作者
+      email: 邮箱
+      comment: 提交注释
+      tree: 本次提交
+      parent: 上次提交
+      commit: 提交哈希
+      add_line_number: 添加%{count}行
+      del_line_number: 删除%{count}行
+      deleted_file: 文件已被删除
+      no_diff_file: 二进制文件无法预览

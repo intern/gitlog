@@ -3,7 +3,7 @@ module ApplicationHelper
     default_url = "#{root_url}images/guest.png"
     gravatar_id = Digest::MD5::hexdigest(email).downcase
     "http://gravatar.com/avatar/#{gravatar_id}.png?s=48&d=#{CGI.escape(default_url)}"
-  end 
+  end
 
   def show_tip_message
     messages = []
@@ -14,6 +14,7 @@ module ApplicationHelper
   end
 
   def breadcrumb(*value)
-    content_tag(:div, value.join("&raquo;"), :class => "breadcrumb")
+    # &raquo;
+    content_tag(:div, value.join(" › "), :class => "breadcrumb")
   end
 end

@@ -37,6 +37,19 @@ module GitDrive
         execute(self, user, repository, ['cat-file', '-t', hash]).strip
       end
 
+      # get type if given hash at given ref
+      # <shell>
+      #   inter@intern:~/gs.git$ git cat-file -t 07931573c4c384e01272
+      #   blob
+      #   inter@intern:~/gs.git$ git cat-file -t master
+      #   commit
+      # </shell>
+      #  @return string blob | tree | commit
+      def get_type_with_hash_and_path(user, repository, hash, path)
+        hash = get_hash_by_path(user, repository, hash, path)
+        get_type_by_hash(user, repository, hash)
+      end
+
       # get log data with the path
       #  <shell>
       #   inter@intern:~/gs.git$ git log 31898bf7b711a9c8c0c7 -- setup.py
@@ -292,15 +305,26 @@ module GitDrive
       #  @params
       #    hash_a   A commit object hash
       #    hash_b   A commit object hash, hash_a's parent hash if hash_b is nil
-      def git_diff_hash_with_commit_hash(user, repository, hash_a, hash_b = nil)
-        #
+      def git_diff_list_with_commit_hash(user, repository, hash)
+        diff_list = {}
+        execute(self,
+          user,
+          repository,
+          %W[diff-tree -r --no-commit-id -M -C --root --numstat #{hash}]
+        ).gsub(/([\d|-]+)\t([\d|-]+)\t(.+)/) do |line|
+          diff_list[$3] = {
+            :add    => $1,
+            :delete => $2
+          }
+        end
+        diff_list
       end
 
       # To compare blob content
-      def git_diff_plain_with_commit_hash(user, repository, hash_a, hash_b = nil)
+      def git_diff_plain_with_commit_path(user, repository, hash, path)
         lists = []
-        all = execute(self, user, repository, ['diff-tree', '-r', '-p', '--no-commit-id', "--full-index", hash_a])
-        all.gsub(/(diff --git a\/([\w|-|_|\.|\/]+) b\/([\w|-|_|\.|\/]+)\n*([\w| ]+)?\nindex ([0-9a-fA-F]{40})\.\.([0-9a-fA-F]{40}) *([0-7]{6})?([\s\S]+?)@@ ([\d|\-|\+|,| ]+) @@[ ]*[\w]*((\n[ |\-|\+][\S| |\t]*)+)+)+/) do |i|
+        all = execute(self, user, repository, ['diff-tree', '-r', '-p', '--no-commit-id', "--full-index", hash, '--', path])
+        all.gsub(/(diff --git a\/([\w|-|_|\.|\/]+) b\/([\w|-|_|\.|\/]+)\n*([\w| ]+)?\nindex ([0-9a-fA-F]{40})\.\.([0-9a-fA-F]{40}) *([0-7]{6})?([\s\S]+?)@@ ([\d|\-|\+|,| ]+) @@[ ]*[\w]*\n(([ |\-|\+][\S| |\t]*\n)+)+)+/) do |i|
           lists << {
             :all => $1,
             :a_file => $2,
@@ -319,14 +343,40 @@ module GitDrive
       end
 
       # To compare blob content
-      def git_diff_plain_with_commit_hash_and_path(user, repository, hash_a, hash_b, path)
-        #
+      def git_diff_plain_with_commit_hash_and_path(user, repository, hash, path)
       end
 
       # To compare blob content
       def git_diff_plain_with_hash(user, repository, hash_a, hash_b)
         #
       end
+
+      #
+      def git_diff_list_with_hash_and_mode(user, repository, hash, mode)
+        diff_list = {}
+        execute(self,
+                user,
+                repository,
+                %W{diff-tree -r --no-commit-id -M -C --root --numstat --diff-filter=[#{mode}] #{hash}}
+        ).gsub(/([\d|-]+)\t([\d|-]+)\t(.+)/) do |line|
+          diff_list[$3] = {
+            :add    => $1,
+            :delete => $2
+          }
+        end
+        diff_list
+      end
+
+      def git_diff_list_merge_with_hash(user, repository, hash)
+        diff_list = git_diff_list_with_commit_hash(user, repository, hash)
+        %w(A C D M R).each do |mode|
+          git_diff_list_with_hash_and_mode(user, repository, hash, mode).each do |key, value|
+            diff_list[key][:mode] = mode if diff_list.key?(key)
+          end
+        end
+        diff_list
+      end
+
 
       module_eval do
         include Command

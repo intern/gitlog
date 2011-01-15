@@ -1,0 +1,17 @@
+<div class="file_commit_list">
+    <table width="100%" cellpadding="0" cellspacing="0">
+        <% commits.each do |commit| %>
+        <tr>
+            <% if type == 'blob' %>
+            <td class="c_hash"><%= link_to commit[:tree_hash][1..10], repos_blob_path(params[:username], params[:repository], commit[:commit_hash], params[:path]) %></td>
+            <% else %>
+            <td class="c_hash"><%= link_to commit[:tree_hash][1..10], repos_tree_path(params[:username], params[:repository], commit[:commit_hash], params[:path]) %></td>
+            <% end %>
+            <td class="min_avatar"><%= image_tag avatar_url(commit[:email]), :width => 20, :height => 20, :class => "fl avatar", :alt => commit[:author], :title => commit[:author] %></td>
+            <td class="author"><%= commit[:author] %></td>
+            <td class="comment" width="50%"><code><%= link_to truncate(commit[:comment], :length => 60), repos_commits_path(params[:username], params[:repository], commit[:commit_hash]) %></code></td>
+            <td class="date"><%= l(commit[:date].to_time) %></td>
+        </tr>
+        <% end %>
+    </table>
+</div>

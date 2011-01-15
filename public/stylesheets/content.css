@@ -8,12 +8,53 @@
 
 .tree {
     line-height: 16px;
+    border: 1px solid #ddd;
+}
+.tree table tr {
+    height: 25px;
+    line-height: 25px;
+}
+.tree table tr th {
+    padding-left: 20px;
+}
+.tree table tr img {
+    vertical-align: text-bottom;
+}
+.tree table tr td.hash span{
+    padding-right: 10px;
+}
+.list_header {
+    background-color: #e6e6e0;
 }
 .odd {
     background-color: #f6f6f0;
 }
-.commits div {
+.commit {
+    height: 100px;
+    padding: 10px;
+    color: #333;
+}
+.commit a {
+    color: #0b5fA5;
+}
+.commit p {
+    padding-top: 3px;
+}
+.commits {
     padding: 10px 0;
+}
+.commits .wraper{
+    margin: 10px 0;
+}
+.commits .commit{
+    border: 1px solid #eee;
+}
+.commits h4 {
+    margin: 10px 0;
+}
+.commits h4 span{
+    margin: 0 5px;
+    color: #555;
 }
 .blob {
     font-family: 'Bitstream Vera Sans Mono', Courier, monospace;
@@ -31,7 +72,7 @@
     padding: 0;
     line-height: 12px;
 }
-.blob pre.line_number {
+.blob td.line_number {
     background-color: #ECECEC;
     border-right: 1px solid #DDD;
     color: #AAA;
@@ -39,6 +80,124 @@
     text-align: right;
     margin-right: 10px;
 }
-.margin_p .blob {
-    margin: 10px 0 10px;
+.blob td.line_number pre, .blob td.line_number2 pre{
+    font-family: 'Bitstream Vera Sans Mono', Courier, monospace;
+}
+.blob td.line_number2 pre {
+    padding-left: 5px;
+}
+.avatar {
+    border: 1px solid #d0d0d0;
+    padding: 2px;
+}
+
+.commit_info {
+    text-align: right;
+    padding-top: 10px;
+}
+.commit_author {
+    margin-left: 60px;
+    height: 60px;
+}
+/** commit diff file list style **/
+table.diff_list {
+    margin-top: 20px;
+    border-bottom: 1px solid #eee;
+}
+table.diff_list td.status {
+    width: 30px;
+}
+table.diff_list td.status span {
+    display: block;
+    height: 20px;
+    width: 20px;
+    margin: 0 10px;
+}
+table.diff_list .status span.A {
+    background: url(../images/file_modes.png) center top;
+}
+table.diff_list .status span.D {
+    background: url(../images/file_modes.png) center -100px;
+}
+table.diff_list .status span.R {
+    background: url(../images/file_modes.png) center -150px;
+}
+table.diff_list .status span.M {
+    background: url(../images/file_modes.png) center -50px;
+}
+table.diff_list tr {
+    height: 30px;
+    line-height: 30px;
+}
+table.diff_list tr td {
+    border-top: 1px solid #eee;
+}
+table.diff_list tr th {
+    color: #666;
+    text-align: left;
+}
+table.diff_list a {
+    color: #4183C4;
+}
+table.diff_list a:hover {
+    text-decoration: underline;
+}
+table.diff_list tr td.number{
+    text-align: right;
+    padding: 0 10px;
+    color: #AAA;
+}
+table.diff_list tr td.number span{
+    color: #3BA3D0;
+}
+
+/** public git pro **/
+ul.public_repos li{
+    line-height: 25px;
+    height: 25px;
+    list-style: lower-roman;
+}
+
+
+/** file_commit_list **/
+.file_commit_list table {
+    border: 1px solid #CCC;
+    border-bottom: none;
+    color: #444;
+}
+.file_commit_list table td {
+    border-bottom: 1px solid #ccc;
+    height: 30px;
+    line-height: 30px;
+}
+.file_commit_list .date {
+    text-align: right;
+    padding-right: 10px;
+    font-size: 12px;
+}
+.file_commit_list .c_hash {
+    padding-left: 10px;
+}
+.file_commit_list .comment a{
+    color: #555;
+}
+.file_commit_list .comment a:hover{
+    color: #444;
+    text-decoration: underline;
+}
+.file_commit_list .min_avatar .avatar {
+    padding: 1px;
+}
+code {
+    font-family: Monaco, 'Courier New', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', monospace;
+}
+h4 {
+    color: #808080;
+}
+.diff_block_head {
+    color: #808080;
+    padding: 5px 0 10px;
+}
+.diff {
+    margin: 10px;
 }

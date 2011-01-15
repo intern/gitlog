@@ -4,7 +4,7 @@
     <li><%= link_to t("globals.commits"), repos_commits_path(params[:username], params[:repository]) %></li>
     <!--<li><%= link_to t("globals.tags"), "#" %></li>-->
 <% end %>
-<%= link_to "Histroy", repos_commits_path(params[:username], params[:repository], params[:tree_hash], params[:path]) %>
+<%= render :partial => "commit", :locals => {:commit => @last_commit, :tree => true } if @last_commit %>
 <%= content_tag :div, file_breadcrumb, :class => "breadcrumb" %>
 <% number, code_block = parser_code(@code) %>
 <div class="blob">
@@ -14,8 +14,8 @@
         </div>
     <table cellspacing="0" cellpadding="0" border="0">
         <tr>
-            <td><pre class="line_number"><%= number.join("\n").html_safe %></pre></td>
-            <td><pre class="line_number2"><%= code_block.join("\n").html_safe %></pre></td>
+            <td class="line_number"><pre><%= number.join("\n").html_safe %></pre></td>
+            <td class="line_number2"><pre><%= code_block.join("\n").html_safe %></pre></td>
         </tr>
      </table>
 </div>

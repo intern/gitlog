@@ -1,0 +1,25 @@
+<% tree ||= false %>
+<div class="commit">
+    <div class="commit_info fr">
+        <p><%= t(".tree") %>: <%= link_to commit[:tree_hash], repos_tree_path(params[:username], params[:repository], commit[:commit_hash]) %></p>
+        <% unless commit[:parent_hash].nil? -%>
+            <% if tree -%>
+            <p><%= t(".parent") %>: <%= link_to commit[:parent_hash], repos_tree_path(params[:username], params[:repository], commit[:parent_hash]) %></p>
+            <% else -%>
+            <p><%= t(".parent") %>: <%= link_to commit[:parent_hash], repos_commit_path(params[:username], params[:repository], commit[:parent_hash]) %></p>
+            <% end -%>
+        <% end -%>
+        <p><%= t(".commit") %>: <%= link_to commit[:commit_hash], repos_commit_path(params[:username], params[:repository], commit[:commit_hash]) %></p>
+    </div>
+    <div>
+        <div>
+            <%= image_tag avatar_url(commit[:email]), :width => 48, :height => 48, :class => "fl avatar", :alt => commit[:author], :title => commit[:author] %>
+            <div class="commit_author">
+                <p><%= t(".author") %>: <%= commit[:author] %></p>
+                <p><%= t(".email") %>: <%= mail_to commit[:email]%></p>
+            </div>
+        </div>
+        <p><%= l(commit[:date].to_time)%></p>
+        <p><%= t(".comment") %>: <span><%= link_to truncate(commit[:comment]), repos_commit_path(params[:username], params[:repository], commit[:commit_hash]), :title => commit[:comment] %></span></p>
+    </div>
+</div>

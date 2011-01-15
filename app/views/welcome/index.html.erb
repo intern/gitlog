@@ -13,7 +13,7 @@
 <!-- End WOWSlider.com BODY section -->
 <p>公开项目</p>
 <% if @public_repos.count %>
-  <ul>
+  <ul class="public_repos">
     <% @public_repos.each do |repos| %>
         <li><%= link_to repos.name, repos_tree_path(repos.login, repos.name) %></li>
     <% end %>

@@ -34,7 +34,7 @@ class UsersController < ApplicationController
 
   def update
     @user = current_user
-    if @user.update_attributes(params[:user])
+    if @user.update_attributes(params[:user].delete_if{|k,v| k == :login })
       flash[:notice] = t("globals.account_updated_success")
       render :action => :edit
     else

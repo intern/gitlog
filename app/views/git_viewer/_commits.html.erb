@@ -1,0 +1,5 @@
+<% commits.each do |commit| %>
+<div class="wraper <%= cycle 'even', 'odd' %>">
+    <%= render :partial => "commit", :locals => { :commit => commit }%>
+</div>
+<% end %>

@@ -4,34 +4,23 @@
     <li><%= link_to t("globals.commits"), repos_commits_path(params[:username], params[:repository]) %></li>
     <!--<li><%= link_to t("globals.tags"), "#" %></li>-->
 <% end %>
-<% if @last_commit  %>
 <div>
-        <p><%= image_tag avatar_url(@last_commit[:email]) %></p>
-        <p>author: <%= @last_commit[:author]%></p>
-        <p>tree:   <%= link_to @last_commit[:tree_hash], repos_tree_path(params[:username], params[:repository], @last_commit[:commit_hash]) %></p>
-        <% unless @last_commit[:parent_hash].nil? %>
-        <p>parent: <%= link_to @last_commit[:parent_hash], repos_tree_path(params[:username], params[:repository], @last_commit[:parent_hash]) %></p>
-        <% end -%>
-        <p>commit: <%= link_to @last_commit[:commit_hash], repos_commit_path(params[:username], params[:repository], @last_commit[:commit_hash]) %></p>
-        <p>comment:<%= @last_commit[:comment]%></p>
-        <p>email: <%= @last_commit[:email]%></p>
-        <p>date:  <%= l(@last_commit[:date].to_time)%></p>
+<%= render( :partial => "commit", :locals => {:commit => @last_commit, :tree => true }) if @last_commit %>
 </div>
-<% end %>
-
 <%= content_tag :div, file_breadcrumb, :class => "breadcrumb" %>
 <% if @tree.count %>
 <div class="tree">
-    <table cellspacing="2">
-        <tr>
-            <th>文件名</th>
+    <table cellspacing="0" width="100%" cellpadding="2">
+        <tr class="list_header">
+            <th align="left">文件名</th>
             <th>文件模式</th>
-            <th>大小</th>
+            <th align="right">大小</th>
             <th>文件哈希</th>
+            <th>操作</th>
         </tr>
     <% @tree.each do |file| %>
        <tr class="<%= cycle 'even', 'odd' %>">
-           <td>
+           <td align="left">
                <% if file[:type] == 'tree' -%>
                <%= image_tag("icons/dir.png") -%>
                <% else %>
@@ -39,9 +28,16 @@
                <% end %>
                <%= content_tag(:span, link_to(file[:path], file_path(file) )) %>
            </td>
-           <td><%= content_tag(:span, file[:mode]) %></td>
-           <td><%= content_tag(:span, number_to_human_size(file[:size])) %></td>
-           <td><%= content_tag(:span, file[:hash]) %></td>
+           <td align="center"><%= content_tag(:span, file[:mode]) %></td>
+           <td align="right"><%= content_tag(:span, (file[:type] == 'tree') ? '-' : number_to_human_size(file[:size])) %></td>
+           <td align="right" class="hash"><%= content_tag(:span, file[:hash]) %></td>
+           <td align="center">
+               <% if file[:type] == 'stree' -%>
+                  <%= link_to "对比", repos_commits_path() %>
+               <% else %>
+                  <%= link_to "对比", file_path(file, :commit) %>
+               <% end %>
+                | <%= link_to "历史", file_path(file, :commits) %></td>
        </tr>
     <% end %>
 

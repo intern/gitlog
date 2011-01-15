@@ -13,18 +13,22 @@ class GitViewerController < ApplicationController
   def blob
     @code = GitPicker.get_blob_plain_by_hash(params[:username], params[:repository], @path_hash)
   end
-    
-    
+
   def commits
     if params[:path].nil?
       @commits = GitPicker.get_commit_info_by_hash(params[:username], params[:repository], params[:commit_hash])
     else
+      @type = GitPicker.get_type_with_hash_and_path(params[:username], params[:repository], params[:commit_hash], params[:path])
       @commits = GitPicker.get_log_list_by_path(params[:username], params[:repository], params[:commit_hash], params[:path])
     end
   end
 
   def commit
-    @diffs = GitPicker.git_diff_plain_with_commit_hash(params[:username], params[:repository], params[:commit_hash])
+    @diff_lists = GitPicker.git_diff_list_merge_with_hash(params[:username], params[:repository], params[:commit_hash])
+  end
+
+  def diff
+    @diffs = GitPicker.git_diff_plain_with_commit_path(params[:username], params[:repository], params[:commit_hash], params[:path])
   end
 
   def branchs
@@ -38,7 +42,7 @@ class GitViewerController < ApplicationController
 
   def tag
   end
-    
+
   private
     def user_and_repository_verify
       unless User.joins(:projects).where(:users => {:login => params[:username]}, :projects => {:name => params[:repository]}).exists?

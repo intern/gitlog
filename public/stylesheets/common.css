@@ -4,6 +4,7 @@ body {
 }
 a {
   color: #172da1;
+  text-decoration: none;
 }
 ul, p, h1, h2, h3, h4, h5 {
     margin: 0;
@@ -79,12 +80,12 @@ input[type="text"],input[type="password"], textarea {
 /** content style **/
 #content_wraper {
     margin: 0 auto;
-    padding: 0 5px;
+    padding: 5px;
     min-width: 1003px;
     min-height: 700px;
     width: 90%;
-    border-left: 1px #E9EAEA solid;
-    border-right: 1px #E9EAEA solid;
+    border: 1px #E9EAEA solid;
+    border-top: none;
 }
 
 .breadcrumb {
@@ -99,6 +100,6 @@ input[type="text"],input[type="password"], textarea {
 /** footer style **/
 #footer {
     height: 34px;
-    margin: 0 auto;
+    margin: 10px auto;
     text-align: center;
 }

@@ -1,0 +1,27 @@
+<% content_for :navigation_list do %>
+    <li><%= link_to t("globals.source"), repos_tree_path(params[:username], params[:repository]) %></li>
+    <!--<li><%= link_to t("globals.branches"), "#" %></li>-->
+    <li><%= link_to t("globals.commits"), repos_commits_path(params[:username], params[:repository]) %></li>
+    <!--<li><%= link_to t("globals.tags"), "#" %></li>-->
+<% end %>
+<h4>文件对比:</h4>
+<% @diffs.each do |diff| %>
+<% number, code_block = parser_code(diff[:file_change]) %>
+<div class="blob diff">
+        <div class="blob-header">
+            <%= content_tag :span, image_tag("icons/txt.png") -%>
+            <%= content_tag :span, diff[:file_mode] %>
+            <%= content_tag :span, "#{diff[:a_hash]} => #{diff[:b_hash]}" %>
+            <%= content_tag :span, "#{diff[:b_file]}", :class => "fr" %>
+        </div>
+    <table cellspacing="0" cellpadding="0" border="0">
+        <tr>
+            <td class="line_number"><div class="diff_block_head">...</div><pre><%= number.join("\n").html_safe %></pre>
+            </td>
+            <td class="line_number2"><div class="diff_block_head"><%= "@@ #{diff[:change_line_number]} @@"%></div>
+                <pre><%= code_block.join("\n").html_safe %></pre>
+             </td>
+        </tr>
+     </table>
+</div>
+<% end %>

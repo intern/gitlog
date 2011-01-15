@@ -11,9 +11,13 @@ module GitViewerHelper
     breadcrumb.reverse!.join(" › ").html_safe
   end
 
-  def file_path(file)
+  def file_path(file, option = nil)
     path = params[:path].nil? ? "#{file[:path]}" : "#{params[:path]}/#{file[:path]}"
-    if file[:type] == 'tree'
+    if option == :commit
+      repos_diff_path(params[:username],params[:repository], params[:tree_hash], path)
+    elsif option == :commits
+      repos_commits_path(params[:username],params[:repository], params[:tree_hash], path)
+    elsif file[:type] == 'tree'
       repos_tree_path(params[:username],params[:repository], params[:tree_hash], path)
     else
       repos_blob_path(params[:username],params[:repository], params[:tree_hash], path)
@@ -28,4 +32,5 @@ module GitViewerHelper
     end
     return numbers, code_blocks
   end
+
 end
